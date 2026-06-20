@@ -7,6 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- ✅ STEP 1: Supabase library loaded from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
   :root{
     --black:#14181c;
@@ -41,35 +45,13 @@
   .icon svg{width:100%;height:100%;}
   :focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
 
-  /* ---------- layout shells ---------- */
-  .screen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-  }
+  .screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
   .hidden{display:none !important;}
-  .auth-card{
-    width:100%;
-    max-width:420px;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:40px 32px;
-    text-align:center;
-  }
-  .brand{
-    font-family:var(--font-display);
-    font-weight:600;
-    font-size:24px;
-    letter-spacing:0.01em;
-    margin:0 0 4px;
-  }
+  .auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px 32px;text-align:center;}
+  .brand{font-family:var(--font-display);font-weight:600;font-size:24px;letter-spacing:0.01em;margin:0 0 4px;}
   .brand .icon{width:22px;height:22px;color:var(--brass);margin-right:8px;}
   .tagline{color:var(--slate);font-size:14px;margin:0 0 28px;}
 
-  /* dial signature element */
   .dial{width:128px;height:128px;margin:0 auto 28px;position:relative;}
   .dial svg{width:100%;height:100%;}
   .dial-ticks{transform-origin:80px 80px;animation:spin 60s linear infinite;}
@@ -78,41 +60,23 @@
   @keyframes spin{to{transform:rotate(360deg);}}
   @keyframes spin-fast{to{transform:rotate(220deg);}}
   @keyframes dial-pulse{0%{transform:scale(1);}40%{transform:scale(1.08);}100%{transform:scale(1);}}
-  @media (prefers-reduced-motion: reduce){
-    .dial-ticks{animation:none;}
-    .dial.unlocking{animation:none;}
-  }
+  @media (prefers-reduced-motion: reduce){.dial-ticks{animation:none;}.dial.unlocking{animation:none;}}
 
   .field{margin-bottom:16px;text-align:left;}
   .field label{display:block;font-size:13px;color:var(--slate);margin-bottom:6px;}
   .field-row{display:flex;gap:8px;}
-  .input{
-    width:100%;
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    color:var(--bone);
-    border-radius:8px;
-    padding:11px 12px;
-    font-size:15px;
-  }
+  .input{width:100%;background:var(--surface-2);border:1px solid var(--border);color:var(--bone);border-radius:8px;padding:11px 12px;font-size:15px;}
   .input:focus{border-color:var(--border-strong);}
   .input.mono{font-family:var(--font-mono);letter-spacing:0.04em;}
   .input-with-action{position:relative;}
   .input-with-action .input{padding-right:42px;}
-  .input-action{
-    position:absolute;right:6px;top:50%;transform:translateY(-50%);
-    background:none;border:none;color:var(--slate);padding:6px;border-radius:6px;
-  }
+  .input-action{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--slate);padding:6px;border-radius:6px;}
   .input-action:hover{color:var(--bone);}
 
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    border:1px solid transparent;border-radius:8px;
-    padding:11px 18px;font-size:15px;font-weight:500;
-    width:100%;
-  }
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:8px;padding:11px 18px;font-size:15px;font-weight:500;width:100%;}
   .btn-primary{background:var(--brass);color:#1b1604;}
   .btn-primary:hover{background:#d6b378;}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
   .btn-secondary{background:transparent;border:1px solid var(--border-strong);color:var(--bone);}
   .btn-secondary:hover{border-color:var(--brass);}
   .btn-danger{background:transparent;border:1px solid var(--danger);color:var(--danger);}
@@ -121,11 +85,7 @@
   .btn-ghost:hover{color:var(--bone);}
   .btn-sm{padding:7px 12px;font-size:13px;width:auto;}
 
-  .notice{
-    border:1px solid var(--border-strong);background:rgba(201,164,97,0.06);
-    border-radius:8px;padding:12px 14px;font-size:13px;color:var(--slate);
-    text-align:left;margin-bottom:20px;
-  }
+  .notice{border:1px solid var(--border-strong);background:rgba(201,164,97,0.06);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--slate);text-align:left;margin-bottom:20px;}
   .notice strong{color:var(--brass);}
   .error-text{color:var(--danger);font-size:13px;margin-top:-6px;margin-bottom:14px;text-align:left;min-height:18px;}
 
@@ -136,16 +96,12 @@
   .switch-link{font-size:13px;color:var(--slate);margin-top:20px;}
   .switch-link button{background:none;border:none;color:var(--brass);font-size:13px;padding:0;}
 
-  /* ---------- app shell (dashboard / settings) ---------- */
   .app{display:none;min-height:100vh;flex-direction:column;}
   .app.active{display:flex;}
-  header.topbar{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 28px;border-bottom:1px solid var(--border);
-    background:var(--surface);
-  }
+  header.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid var(--border);background:var(--surface);}
   .topbar .brand{font-size:18px;margin:0;display:flex;align-items:center;}
   .topbar-actions{display:flex;align-items:center;gap:6px;}
+  .user-email{font-size:12px;color:var(--slate);margin-right:8px;}
   main.content{flex:1;max-width:760px;width:100%;margin:0 auto;padding:32px 24px 80px;}
 
   .content-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
@@ -155,60 +111,46 @@
   .search-wrap input{padding-left:36px;}
   .new-entry-btn{width:auto;white-space:nowrap;}
 
+  /* category tabs */
+  .cat-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .cat-tab{background:var(--surface-2);border:1px solid var(--border);color:var(--slate);border-radius:20px;padding:6px 16px;font-size:13px;}
+  .cat-tab.active{background:var(--brass);color:#1b1604;border-color:var(--brass);font-weight:500;}
+  .cat-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--surface-2);color:var(--brass);border:1px solid var(--border);margin-left:8px;text-transform:capitalize;}
+
   .entry-list{display:flex;flex-direction:column;border-top:1px solid var(--border);}
-  .entry{
-    display:flex;align-items:center;gap:16px;
-    padding:16px 4px;border-bottom:1px solid var(--border);
-  }
+  .entry{display:flex;align-items:center;gap:16px;padding:16px 4px;border-bottom:1px solid var(--border);}
   .entry-main{flex:1;min-width:0;}
   .entry-site{font-weight:500;font-size:15px;margin:0 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .entry-user{font-size:13px;color:var(--slate);margin:0 0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .entry-pass{font-family:var(--font-mono);font-size:14px;color:var(--bone);letter-spacing:0.05em;}
   .entry-actions{display:flex;gap:2px;flex-shrink:0;}
 
-  .empty-state{
-    text-align:center;padding:64px 20px;color:var(--slate);
-    border:1px dashed var(--border-strong);border-radius:var(--radius);margin-top:8px;
-  }
+  .empty-state{text-align:center;padding:64px 20px;color:var(--slate);border:1px dashed var(--border-strong);border-radius:var(--radius);margin-top:8px;}
   .empty-state .icon{width:32px;height:32px;color:var(--brass-dim);margin-bottom:12px;}
   .empty-state p{margin:0 0 18px;font-size:14px;}
   .empty-state .btn{width:auto;}
 
   .settings-section{margin-bottom:32px;}
   .settings-section h2{font-size:15px;font-weight:600;color:var(--brass);margin:0 0 14px;text-transform:uppercase;letter-spacing:0.04em;}
-  .settings-row{
-    display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:14px 0;border-bottom:1px solid var(--border);
-  }
+  .settings-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);}
   .settings-row:last-child{border-bottom:none;}
   .settings-row-label{font-size:14px;}
   .settings-row-sub{font-size:12px;color:var(--slate);margin-top:2px;}
   select.input{width:auto;}
 
-  /* ---------- modal ---------- */
-  .modal-overlay{
-    display:flex;align-items:center;justify-content:center;
-    position:fixed;inset:0;background:rgba(10,12,15,0.7);padding:20px;z-index:50;
-  }
-  .modal{
-    width:100%;max-width:440px;background:var(--surface);border:1px solid var(--border-strong);
-    border-radius:var(--radius);padding:28px;
-  }
+  .modal-overlay{display:flex;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(10,12,15,0.7);padding:20px;z-index:50;}
+  .modal{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius);padding:28px;}
   .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
   .modal-head h2{font-family:var(--font-display);font-size:18px;font-weight:600;margin:0;}
   .gen-row{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:var(--slate);flex-wrap:wrap;}
   .gen-row label{display:flex;align-items:center;gap:5px;}
   .modal-actions{display:flex;gap:10px;margin-top:24px;}
 
-  .toast{
-    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);
-    background:var(--surface-2);border:1px solid var(--border-strong);color:var(--bone);
-    padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;
-    transition:opacity 0.25s, transform 0.25s;z-index:100;
-  }
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--surface-2);border:1px solid var(--border-strong);color:var(--bone);padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity 0.25s, transform 0.25s;z-index:100;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   footer.foot{text-align:center;color:var(--slate);font-size:12px;padding:18px;}
+  .loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--brass);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;}
 
   @media (max-width:520px){
     .auth-card{padding:32px 22px;}
@@ -221,8 +163,41 @@
 </head>
 <body>
 
-<!-- ============ SETUP SCREEN ============ -->
-<section id="view-setup" class="screen">
+<!-- ============ AUTH SCREEN (login / signup) ============ -->
+<section id="view-auth" class="screen hidden">
+  <div class="auth-card">
+    <div class="dial" aria-hidden="true">
+      <svg viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="74" fill="none" stroke="var(--border)" stroke-width="1"/>
+        <g class="dial-ticks" id="authTicks"></g>
+        <circle cx="80" cy="80" r="48" fill="none" stroke="var(--brass-dim)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="3.5" fill="#c9a461"/>
+      </svg>
+    </div>
+    <p class="brand"><span class="icon" id="authShieldIcon"></span>Cipher Vault</p>
+    <p class="tagline" id="authTagline">Create an account to start your vault</p>
+
+    <form id="authForm">
+      <div class="field">
+        <label for="authEmail">Email</label>
+        <input class="input" type="email" id="authEmail" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="authPassword">Account password</label>
+        <div class="input-with-action">
+          <input class="input" type="password" id="authPassword" autocomplete="current-password" required>
+          <button type="button" class="input-action" data-toggle="authPassword" aria-label="Show password"></button>
+        </div>
+      </div>
+      <div class="error-text" id="authError"></div>
+      <button type="submit" class="btn btn-primary" id="authSubmitBtn">Create account</button>
+    </form>
+    <div class="switch-link" id="authSwitchWrap">Already have an account? <button type="button" id="authSwitchBtn">Log in</button></div>
+  </div>
+</section>
+
+<!-- ============ SETUP MASTER KEY SCREEN ============ -->
+<section id="view-setup" class="screen hidden">
   <div class="auth-card">
     <div class="dial" aria-hidden="true">
       <svg viewBox="0 0 160 160">
@@ -233,27 +208,28 @@
       </svg>
     </div>
     <p class="brand"><span class="icon" id="setupShieldIcon"></span>Cipher Vault</p>
-    <p class="tagline">A password vault that only you can open</p>
+    <p class="tagline">Now create your master key</p>
 
-    <div class="notice"><strong>No resets, no recovery.</strong> Your master password encrypts everything locally. If you forget it, your saved passwords cannot be recovered by anyone — not even by rebuilding this page.</div>
+    <div class="notice"><strong>No resets, no recovery.</strong> Your master key encrypts everything in your browser before it's saved. If you forget it, your saved passwords cannot be recovered by anyone — not even by us.</div>
 
     <form id="setupForm">
       <div class="field">
-        <label for="setupPassword">Create a master password</label>
+        <label for="setupPassword">Create a master key</label>
         <div class="input-with-action">
           <input class="input mono" type="password" id="setupPassword" autocomplete="new-password" required>
-          <button type="button" class="input-action" data-toggle="setupPassword" aria-label="Show password"></button>
+          <button type="button" class="input-action" data-toggle="setupPassword" aria-label="Show key"></button>
         </div>
         <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
-        <div class="strength-label" id="strengthLabel">Type a password to see its strength</div>
+        <div class="strength-label" id="strengthLabel">Type a key to see its strength</div>
       </div>
       <div class="field">
-        <label for="setupConfirm">Confirm master password</label>
+        <label for="setupConfirm">Confirm master key</label>
         <input class="input mono" type="password" id="setupConfirm" autocomplete="new-password" required>
       </div>
       <div class="error-text" id="setupError"></div>
       <button type="submit" class="btn btn-primary">Create vault</button>
     </form>
+    <div class="switch-link"><button type="button" id="setupLogoutBtn">Log out</button></div>
   </div>
 </section>
 
@@ -269,35 +245,43 @@
       </svg>
     </div>
     <p class="brand"><span class="icon" id="unlockShieldIcon"></span>Cipher Vault</p>
-    <p class="tagline">Enter your master password to unlock</p>
+    <p class="tagline">Enter your master key to unlock</p>
 
     <form id="unlockForm">
       <div class="field">
-        <label for="unlockPassword">Master password</label>
+        <label for="unlockPassword">Master key</label>
         <div class="input-with-action">
           <input class="input mono" type="password" id="unlockPassword" autocomplete="current-password" required>
-          <button type="button" class="input-action" data-toggle="unlockPassword" aria-label="Show password"></button>
+          <button type="button" class="input-action" data-toggle="unlockPassword" aria-label="Show key"></button>
         </div>
       </div>
       <div class="error-text" id="unlockError"></div>
       <button type="submit" class="btn btn-primary">Unlock vault</button>
     </form>
-    <div class="switch-link">Not your vault on this device? <button type="button" id="wipeLink">Erase it</button></div>
+    <div class="switch-link"><button type="button" id="unlockLogoutBtn">Log out</button></div>
   </div>
 </section>
 
-<!-- ============ APP SHELL (dashboard + settings) ============ -->
+<!-- ============ LOADING SCREEN ============ -->
+<section id="view-loading" class="screen">
+  <div style="text-align:center;">
+    <div class="loading-spinner"></div>
+    <p class="tagline" style="margin-top:16px;">Loading…</p>
+  </div>
+</section>
+
+<!-- ============ APP SHELL ============ -->
 <div id="app" class="app">
   <header class="topbar">
     <p class="brand"><span class="icon" id="topShieldIcon"></span>Cipher Vault</p>
     <div class="topbar-actions">
+      <span class="user-email" id="userEmailLabel"></span>
       <button class="btn btn-ghost" id="openSettingsBtn" aria-label="Settings"></button>
       <button class="btn btn-ghost" id="lockBtn" aria-label="Lock vault"></button>
     </div>
   </header>
 
   <main class="content">
-    <!-- dashboard view -->
     <div id="dashboardView">
       <div class="content-header">
         <h1>Your entries</h1>
@@ -307,13 +291,32 @@
         </div>
         <button class="btn btn-primary new-entry-btn" id="newEntryBtn"><span class="icon" id="plusIcon"></span>New entry</button>
       </div>
+
+      <!-- category tabs -->
+      <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab active" data-cat="all">All</button>
+        <button class="cat-tab" data-cat="social">Social</button>
+        <button class="cat-tab" data-cat="work">Work</button>
+        <button class="cat-tab" data-cat="educational">Educational</button>
+      </div>
+
       <div id="entryListWrap"></div>
     </div>
 
-    <!-- settings view -->
     <div id="settingsView" class="hidden">
       <div class="content-header">
         <h1><button class="btn btn-ghost" id="backFromSettings" aria-label="Back" style="margin-left:-8px;"></button>Settings</h1>
+      </div>
+
+      <div class="settings-section">
+        <h2>Account</h2>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Signed in as</div>
+            <div class="settings-row-sub" id="settingsEmail"></div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="logoutBtn">Log out</button>
+        </div>
       </div>
 
       <div class="settings-section">
@@ -337,50 +340,28 @@
       </div>
 
       <div class="settings-section">
-        <h2>Master password</h2>
+        <h2>Master key</h2>
         <form id="changePasswordForm">
           <div class="field">
-            <label for="currentPw">Current master password</label>
+            <label for="currentPw">Current master key</label>
             <input class="input mono" type="password" id="currentPw" autocomplete="current-password" required>
           </div>
           <div class="field">
-            <label for="newPw">New master password</label>
+            <label for="newPw">New master key</label>
             <input class="input mono" type="password" id="newPw" autocomplete="new-password" required>
           </div>
           <div class="field">
-            <label for="newPwConfirm">Confirm new master password</label>
+            <label for="newPwConfirm">Confirm new master key</label>
             <input class="input mono" type="password" id="newPwConfirm" autocomplete="new-password" required>
           </div>
           <div class="error-text" id="changePwError"></div>
-          <button type="submit" class="btn btn-secondary">Update master password</button>
+          <button type="submit" class="btn btn-secondary">Update master key</button>
         </form>
-      </div>
-
-      <div class="settings-section">
-        <h2>Backup</h2>
-        <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Export encrypted backup</div>
-            <div class="settings-row-sub">Downloads a file with your data still encrypted</div>
-          </div>
-          <button class="btn btn-secondary btn-sm" id="exportBtn"><span class="icon" id="downloadIcon"></span>Export</button>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h2>Danger zone</h2>
-        <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Erase this vault</div>
-            <div class="settings-row-sub">Deletes everything stored on this device. Cannot be undone.</div>
-          </div>
-          <button class="btn btn-danger btn-sm" id="eraseVaultBtn">Erase vault</button>
-        </div>
       </div>
     </div>
   </main>
 
-  <footer class="foot">Encrypted on your device with AES-256 — nothing is ever sent to a server.</footer>
+  <footer class="foot">Encrypted in your browser with AES-256 — the server only ever stores ciphertext.</footer>
 </div>
 
 <!-- ============ ADD / EDIT ENTRY MODAL ============ -->
@@ -392,6 +373,14 @@
     </div>
     <form id="entryForm">
       <input type="hidden" id="entryId">
+      <div class="field">
+        <label for="entryCategory">Category</label>
+        <select class="input" id="entryCategory" style="width:100%;">
+          <option value="social">Social</option>
+          <option value="work">Work</option>
+          <option value="educational">Educational</option>
+        </select>
+      </div>
       <div class="field">
         <label for="entrySite">Site or app name</label>
         <input class="input" id="entrySite" placeholder="e.g. College email" required>
@@ -429,7 +418,16 @@
 
 <script>
 /* ============================================================
-   ICONS — small inline SVGs, no external icon font dependency
+   🔧 STEP 2: PASTE YOUR SUPABASE KEYS HERE
+   Get these from your Supabase project → Settings → API
+   ============================================================ */
+const SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_ANON_PUBLIC_KEY_HERE';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ============================================================
+   ICONS
    ============================================================ */
 const ICONS = {
   shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>',
@@ -442,15 +440,14 @@ const ICONS = {
   lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
   search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
-  download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>',
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>',
   refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg>'
 };
-function setIcon(elId, name){ document.getElementById(elId).innerHTML = ICONS[name]; }
+function setIcon(elId, name){ const el=document.getElementById(elId); if(el) el.innerHTML = ICONS[name]; }
 
 /* ============================================================
-   CRYPTO HELPERS — Web Crypto API, AES-256-GCM + PBKDF2
+   CRYPTO HELPERS (unchanged — your master key system)
    ============================================================ */
 function strToBuf(str){ return new TextEncoder().encode(str); }
 function bufToStr(buf){ return new TextDecoder().decode(buf); }
@@ -461,27 +458,19 @@ function b64ToBuf(b64){
   for (let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
   return bytes;
 }
-
-// Derives a 256-bit AES key from the master password + a stored salt.
-// The master password itself is never stored anywhere, only used in memory.
 async function deriveKey(password, saltB64){
   const salt = b64ToBuf(saltB64);
   const baseKey = await crypto.subtle.importKey('raw', strToBuf(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
     { name:'PBKDF2', salt, iterations:250000, hash:'SHA-256' },
-    baseKey,
-    { name:'AES-GCM', length:256 },
-    false,
-    ['encrypt','decrypt']
+    baseKey, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
   );
 }
-
 async function encryptText(key, plaintext){
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const cipherBuf = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, strToBuf(plaintext));
   return { iv: bufToB64(iv), data: bufToB64(cipherBuf) };
 }
-
 async function decryptText(key, ivB64, dataB64){
   const iv = b64ToBuf(ivB64);
   const data = b64ToBuf(dataB64);
@@ -492,66 +481,58 @@ async function decryptText(key, ivB64, dataB64){
 /* ============================================================
    APP STATE
    ============================================================ */
-let sessionKey = null;     // CryptoKey, exists only in memory while unlocked
-let vaultData = null;      // { salt, verifier:{iv,data}, entries:[...], settings:{} }
+let sessionKey = null;      // CryptoKey in memory while unlocked
+let currentUser = null;     // Supabase user
+let vaultMeta = null;       // { salt, verifier } from DB
+let entries = [];           // array of entries from DB (encrypted)
+let activeCategory = 'all';
+let autoLockMinutes = 5;
 let autoLockTimer = null;
-let revealedPasswords = {}; // transient cache of decrypted passwords for visible entries
-
-const STORAGE_KEY = 'vault:data';
+let revealedPasswords = {};
 
 /* ============================================================
-   STORAGE
+   SUPABASE DATA LAYER
    ============================================================ */
-async function loadVaultRaw(){
-  const res = await window.storage.get(STORAGE_KEY, false); // throws if missing
-  return JSON.parse(res.value);
+// Get the vault meta (salt + verifier) for current user
+async function fetchVaultMeta(){
+  const { data, error } = await supabase
+    .from('vault_meta').select('*').eq('user_id', currentUser.id).maybeSingle();
+  if(error) throw error;
+  return data; // null if user hasn't set a master key yet
 }
-async function saveVault(){
-  try{
-    const result = await window.storage.set(STORAGE_KEY, JSON.stringify(vaultData), false);
-    if(!result) showToast('Could not save — please try again');
-  }catch(e){
-    showToast('Could not save — please try again');
-  }
+async function saveVaultMeta(salt, verifier){
+  const { error } = await supabase.from('vault_meta').upsert({
+    user_id: currentUser.id,
+    salt,
+    verifier_iv: verifier.iv,
+    verifier_data: verifier.data,
+    auto_lock_minutes: autoLockMinutes
+  });
+  if(error) throw error;
+}
+async function updateAutoLockPref(){
+  await supabase.from('vault_meta').update({ auto_lock_minutes: autoLockMinutes }).eq('user_id', currentUser.id);
+}
+async function fetchEntries(){
+  const { data, error } = await supabase
+    .from('vault_items').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
+  if(error) throw error;
+  return data || [];
 }
 
 /* ============================================================
    VIEW SWITCHING
    ============================================================ */
 function show(id){
-  ['view-setup','view-unlock'].forEach(v=>{
+  ['view-auth','view-setup','view-unlock','view-loading'].forEach(v=>{
     document.getElementById(v).classList.toggle('hidden', v!==id);
   });
   document.getElementById('app').classList.toggle('active', id==='app');
 }
 
-async function init(){
-  buildDial('setupTicks');
-  buildDial('unlockTicks');
-  setIcon('setupShieldIcon','shield');
-  setIcon('unlockShieldIcon','shield');
-  setIcon('topShieldIcon','shield');
-  setIcon('openSettingsBtn','gear');
-  setIcon('lockBtn','lock');
-  setIcon('plusIcon','plus');
-  setIcon('searchIcon','search');
-  setIcon('downloadIcon','download');
-  setIcon('refreshIcon','refresh');
-  setIcon('backFromSettings','back');
-  setIcon('closeEntryModal','close');
-  setIcon('cancelEntryBtn','close') && (document.getElementById('cancelEntryBtn').innerHTML='Cancel');
-  document.querySelectorAll('.input-action').forEach(btn=> btn.innerHTML = ICONS.eye);
-
-  try{
-    await loadVaultRaw();
-    show('view-unlock');
-  }catch(e){
-    show('view-setup');
-  }
-}
-
 function buildDial(groupId){
   const g = document.getElementById(groupId);
+  if(!g) return;
   let html = '';
   for(let i=0;i<16;i++){
     const angle = (i/16) * Math.PI * 2;
@@ -563,6 +544,52 @@ function buildDial(groupId){
 }
 
 /* ============================================================
+   INIT — check if a user is already logged in
+   ============================================================ */
+async function init(){
+  buildDial('authTicks');
+  buildDial('setupTicks');
+  buildDial('unlockTicks');
+  setIcon('authShieldIcon','shield');
+  setIcon('setupShieldIcon','shield');
+  setIcon('unlockShieldIcon','shield');
+  setIcon('topShieldIcon','shield');
+  setIcon('openSettingsBtn','gear');
+  setIcon('lockBtn','lock');
+  setIcon('plusIcon','plus');
+  setIcon('searchIcon','search');
+  setIcon('refreshIcon','refresh');
+  setIcon('backFromSettings','back');
+  setIcon('closeEntryModal','close');
+  document.querySelectorAll('.input-action').forEach(btn=> btn.innerHTML = ICONS.eye);
+
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(session){
+    currentUser = session.user;
+    await routeAfterLogin();
+  } else {
+    show('view-auth');
+  }
+}
+
+// After login: decide whether to show "set master key" or "unlock"
+async function routeAfterLogin(){
+  show('view-loading');
+  try{
+    vaultMeta = await fetchVaultMeta();
+    if(vaultMeta){
+      autoLockMinutes = vaultMeta.auto_lock_minutes ?? 5;
+      show('view-unlock');
+    } else {
+      show('view-setup');
+    }
+  }catch(e){
+    showToast('Could not reach the server');
+    show('view-auth');
+  }
+}
+
+/* ============================================================
    TOAST
    ============================================================ */
 function showToast(msg){
@@ -570,11 +597,86 @@ function showToast(msg){
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(t._timer);
-  t._timer = setTimeout(()=> t.classList.remove('show'), 2200);
+  t._timer = setTimeout(()=> t.classList.remove('show'), 2400);
 }
 
 /* ============================================================
-   SETUP FLOW
+   AUTH (login / signup) — Supabase
+   ============================================================ */
+let authMode = 'signup'; // 'signup' | 'login'
+
+function updateAuthUI(){
+  document.getElementById('authTagline').textContent =
+    authMode==='signup' ? 'Create an account to start your vault' : 'Welcome back — log in to your vault';
+  document.getElementById('authSubmitBtn').textContent =
+    authMode==='signup' ? 'Create account' : 'Log in';
+  document.getElementById('authSwitchWrap').innerHTML =
+    authMode==='signup'
+      ? 'Already have an account? <button type="button" id="authSwitchBtn">Log in</button>'
+      : 'New here? <button type="button" id="authSwitchBtn">Create an account</button>';
+  document.getElementById('authPassword').setAttribute('autocomplete', authMode==='signup'?'new-password':'current-password');
+  bindAuthSwitch();
+}
+function bindAuthSwitch(){
+  document.getElementById('authSwitchBtn').addEventListener('click', ()=>{
+    authMode = authMode==='signup' ? 'login' : 'signup';
+    document.getElementById('authError').textContent = '';
+    updateAuthUI();
+  });
+}
+bindAuthSwitch();
+
+document.getElementById('authForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const errEl = document.getElementById('authError');
+  const btn = document.getElementById('authSubmitBtn');
+  errEl.textContent = '';
+  if(password.length < 6){ errEl.textContent = 'Account password must be at least 6 characters.'; return; }
+  btn.disabled = true;
+
+  try{
+    if(authMode==='signup'){
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if(error) throw error;
+      if(data.session){
+        currentUser = data.session.user;
+        await routeAfterLogin();
+      } else {
+        // email confirmation is ON in Supabase
+        errEl.style.color = 'var(--verdigris)';
+        errEl.textContent = 'Check your email to confirm your account, then log in.';
+        authMode='login'; updateAuthUI();
+      }
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if(error) throw error;
+      currentUser = data.session.user;
+      await routeAfterLogin();
+    }
+  }catch(err){
+    errEl.style.color = 'var(--danger)';
+    errEl.textContent = err.message || 'Something went wrong.';
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+async function doLogout(){
+  await supabase.auth.signOut();
+  sessionKey = null; currentUser = null; vaultMeta = null;
+  entries = []; revealedPasswords = {};
+  clearTimeout(autoLockTimer);
+  ['authEmail','authPassword','setupPassword','setupConfirm','unlockPassword'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  show('view-auth');
+}
+document.getElementById('setupLogoutBtn').addEventListener('click', doLogout);
+document.getElementById('unlockLogoutBtn').addEventListener('click', doLogout);
+document.getElementById('logoutBtn').addEventListener('click', doLogout);
+
+/* ============================================================
+   SETUP MASTER KEY
    ============================================================ */
 function passwordStrength(pw){
   let score = 0;
@@ -583,7 +685,7 @@ function passwordStrength(pw){
   if(/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
   if(/[0-9]/.test(pw)) score++;
   if(/[^a-zA-Z0-9]/.test(pw)) score++;
-  return score; // 0-5
+  return score;
 }
 document.getElementById('setupPassword').addEventListener('input', e=>{
   const score = passwordStrength(e.target.value);
@@ -591,7 +693,7 @@ document.getElementById('setupPassword').addEventListener('input', e=>{
   const fill = document.getElementById('strengthFill');
   const label = document.getElementById('strengthLabel');
   fill.style.width = pct+'%';
-  if(!e.target.value){ label.textContent='Type a password to see its strength'; fill.style.background='var(--surface-2)'; return; }
+  if(!e.target.value){ label.textContent='Type a key to see its strength'; fill.style.background='var(--surface-2)'; return; }
   if(score<=1){ label.textContent='Weak — add length and variety'; fill.style.background='var(--danger)'; }
   else if(score<=3){ label.textContent='Fair — could be stronger'; fill.style.background='var(--brass)'; }
   else { label.textContent='Strong'; fill.style.background='var(--verdigris)'; }
@@ -604,69 +706,62 @@ document.getElementById('setupForm').addEventListener('submit', async e=>{
   const errEl = document.getElementById('setupError');
   errEl.textContent = '';
   if(pw.length < 8){ errEl.textContent = 'Use at least 8 characters.'; return; }
-  if(pw !== confirm){ errEl.textContent = 'Passwords do not match.'; return; }
+  if(pw !== confirm){ errEl.textContent = 'Keys do not match.'; return; }
 
   const salt = bufToB64(crypto.getRandomValues(new Uint8Array(16)));
   const key = await deriveKey(pw, salt);
   const verifier = await encryptText(key, 'vault-unlock-ok');
-  vaultData = { salt, verifier, entries: [], settings:{ autoLockMinutes: 5 } };
-  await saveVault();
-  sessionKey = key;
-  enterApp();
+  try{
+    autoLockMinutes = 5;
+    await saveVaultMeta(salt, verifier);
+    vaultMeta = { salt, verifier_iv:verifier.iv, verifier_data:verifier.data, auto_lock_minutes:5 };
+    sessionKey = key;
+    entries = [];
+    await enterApp();
+  }catch(err){
+    errEl.textContent = 'Could not save to the server. Try again.';
+  }
 });
 
 /* ============================================================
-   UNLOCK FLOW
+   UNLOCK
    ============================================================ */
 document.getElementById('unlockForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const pw = document.getElementById('unlockPassword').value;
   const errEl = document.getElementById('unlockError');
   errEl.textContent = '';
-  let stored;
-  try{ stored = await loadVaultRaw(); }
-  catch(err){ show('view-setup'); return; }
-
   try{
-    const key = await deriveKey(pw, stored.salt);
-    const check = await decryptText(key, stored.verifier.iv, stored.verifier.data);
+    const key = await deriveKey(pw, vaultMeta.salt);
+    const check = await decryptText(key, vaultMeta.verifier_iv, vaultMeta.verifier_data);
     if(check !== 'vault-unlock-ok') throw new Error('mismatch');
     sessionKey = key;
-    vaultData = stored;
-    if(!vaultData.settings) vaultData.settings = { autoLockMinutes:5 };
 
     const dial = document.getElementById('unlockDial');
     dial.classList.add('unlocking');
+    entries = await fetchEntries();
     setTimeout(()=>{ dial.classList.remove('unlocking'); enterApp(); }, 550);
   }catch(err){
-    errEl.textContent = 'Incorrect master password.';
+    errEl.textContent = 'Incorrect master key.';
     document.getElementById('unlockPassword').value = '';
   }
-});
-
-document.getElementById('wipeLink').addEventListener('click', async ()=>{
-  if(!confirm('This permanently erases the vault stored on this device. Continue?')) return;
-  try{ await window.storage.delete(STORAGE_KEY, false); }catch(e){}
-  show('view-setup');
-  document.getElementById('setupPassword').value = '';
-  document.getElementById('setupConfirm').value = '';
 });
 
 /* ============================================================
    ENTER APP / LOCK
    ============================================================ */
-function enterApp(){
+async function enterApp(){
   show('app');
   document.getElementById('dashboardView').classList.remove('hidden');
   document.getElementById('settingsView').classList.add('hidden');
-  document.getElementById('autoLockSelect').value = String(vaultData.settings.autoLockMinutes ?? 5);
+  document.getElementById('autoLockSelect').value = String(autoLockMinutes);
+  document.getElementById('userEmailLabel').textContent = currentUser.email;
+  document.getElementById('settingsEmail').textContent = currentUser.email;
   renderEntries();
   resetAutoLockTimer();
 }
-
 function lockVault(){
   sessionKey = null;
-  vaultData = null;
   revealedPasswords = {};
   clearTimeout(autoLockTimer);
   document.getElementById('unlockPassword').value = '';
@@ -678,17 +773,15 @@ document.getElementById('lockNowBtn').addEventListener('click', lockVault);
 
 function resetAutoLockTimer(){
   clearTimeout(autoLockTimer);
-  const minutes = vaultData?.settings?.autoLockMinutes ?? 5;
-  if(!minutes) return;
-  autoLockTimer = setTimeout(()=>{ showToast('Vault locked due to inactivity'); lockVault(); }, minutes*60*1000);
+  if(!autoLockMinutes) return;
+  autoLockTimer = setTimeout(()=>{ showToast('Vault locked due to inactivity'); lockVault(); }, autoLockMinutes*60*1000);
 }
 ['mousemove','keydown','click','touchstart'].forEach(evt=>{
   document.addEventListener(evt, ()=>{ if(sessionKey) resetAutoLockTimer(); });
 });
-
 document.getElementById('autoLockSelect').addEventListener('change', async e=>{
-  vaultData.settings.autoLockMinutes = Number(e.target.value);
-  await saveVault();
+  autoLockMinutes = Number(e.target.value);
+  await updateAutoLockPref();
   resetAutoLockTimer();
   showToast('Auto-lock preference saved');
 });
@@ -706,16 +799,30 @@ document.getElementById('backFromSettings').addEventListener('click', ()=>{
 });
 
 /* ============================================================
-   DASHBOARD — render + search
+   CATEGORY TABS
+   ============================================================ */
+document.getElementById('catTabs').addEventListener('click', e=>{
+  const tab = e.target.closest('.cat-tab');
+  if(!tab) return;
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  activeCategory = tab.dataset.cat;
+  renderEntries();
+});
+
+/* ============================================================
+   DASHBOARD RENDER + SEARCH
    ============================================================ */
 function renderEntries(){
   const wrap = document.getElementById('entryListWrap');
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
-  const entries = vaultData.entries.filter(en =>
-    !query || en.site.toLowerCase().includes(query) || en.username.toLowerCase().includes(query)
-  );
+  let filtered = entries.filter(en=>{
+    const matchesCat = activeCategory==='all' || en.category===activeCategory;
+    const matchesQuery = !query || en.site.toLowerCase().includes(query) || en.username.toLowerCase().includes(query);
+    return matchesCat && matchesQuery;
+  });
 
-  if(vaultData.entries.length === 0){
+  if(entries.length === 0){
     wrap.innerHTML = '';
     const empty = document.createElement('div');
     empty.className = 'empty-state';
@@ -726,15 +833,14 @@ function renderEntries(){
     document.getElementById('emptyAddBtn').addEventListener('click', ()=> openEntryModal());
     return;
   }
-
-  if(entries.length === 0){
-    wrap.innerHTML = '<div class="empty-state"><p>No entries match that search.</p></div>';
+  if(filtered.length === 0){
+    wrap.innerHTML = '<div class="empty-state"><p>No entries match that search or category.</p></div>';
     return;
   }
 
   const list = document.createElement('div');
   list.className = 'entry-list';
-  entries.forEach(en=>{
+  filtered.forEach(en=>{
     const row = document.createElement('div');
     row.className = 'entry';
     const isRevealed = !!revealedPasswords[en.id];
@@ -750,7 +856,9 @@ function renderEntries(){
         <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${en.id}" aria-label="Edit entry">${ICONS.edit}</button>
         <button class="btn btn-ghost btn-sm" data-action="delete" data-id="${en.id}" aria-label="Delete entry">${ICONS.trash}</button>
       </div>`;
-    row.querySelector('.entry-site').textContent = en.site;
+    const siteEl = row.querySelector('.entry-site');
+    siteEl.textContent = en.site;
+    siteEl.insertAdjacentHTML('beforeend', `<span class="cat-badge">${en.category}</span>`);
     row.querySelector('.entry-user').textContent = en.username;
     if(isRevealed) row.querySelector('.entry-pass').textContent = revealedPasswords[en.id];
     list.appendChild(row);
@@ -765,7 +873,7 @@ document.getElementById('entryListWrap').addEventListener('click', async e=>{
   const btn = e.target.closest('button[data-action]');
   if(!btn) return;
   const id = btn.dataset.id;
-  const entry = vaultData.entries.find(x=>x.id===id);
+  const entry = entries.find(x=>x.id===id);
   if(!entry) return;
   const action = btn.dataset.action;
 
@@ -782,14 +890,15 @@ document.getElementById('entryListWrap').addEventListener('click', async e=>{
       const payload = JSON.parse(await decryptText(sessionKey, entry.iv, entry.data));
       await navigator.clipboard.writeText(payload.password);
       showToast('Password copied');
-    }catch(err){ showToast('Could not copy — clipboard access blocked here'); }
+    }catch(err){ showToast('Could not copy — clipboard blocked here'); }
   }
   if(action === 'edit') openEntryModal(entry);
   if(action === 'delete'){
     if(!confirm(`Delete the entry for "${entry.site}"?`)) return;
-    vaultData.entries = vaultData.entries.filter(x=>x.id!==id);
+    const { error } = await supabase.from('vault_items').delete().eq('id', id);
+    if(error){ showToast('Could not delete'); return; }
+    entries = entries.filter(x=>x.id!==id);
     delete revealedPasswords[id];
-    await saveVault();
     renderEntries();
     showToast('Entry deleted');
   }
@@ -806,11 +915,14 @@ async function openEntryModal(entry){
   document.getElementById('entryPassword').type = 'password';
 
   if(entry){
+    document.getElementById('entryCategory').value = entry.category || 'social';
     document.getElementById('entrySite').value = entry.site;
     document.getElementById('entryUsername').value = entry.username;
     const payload = JSON.parse(await decryptText(sessionKey, entry.iv, entry.data));
     document.getElementById('entryPassword').value = payload.password;
     document.getElementById('entryNotes').value = payload.notes || '';
+  } else {
+    document.getElementById('entryCategory').value = activeCategory==='all' ? 'social' : activeCategory;
   }
   document.getElementById('entryModalOverlay').classList.remove('hidden');
 }
@@ -821,6 +933,7 @@ document.getElementById('cancelEntryBtn').addEventListener('click', closeEntryMo
 document.getElementById('entryForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const id = document.getElementById('entryId').value;
+  const category = document.getElementById('entryCategory').value;
   const site = document.getElementById('entrySite').value.trim();
   const username = document.getElementById('entryUsername').value.trim();
   const password = document.getElementById('entryPassword').value;
@@ -832,33 +945,33 @@ document.getElementById('entryForm').addEventListener('submit', async e=>{
   }
   const encrypted = await encryptText(sessionKey, JSON.stringify({ password, notes }));
 
-  if(id){
-    const entry = vaultData.entries.find(x=>x.id===id);
-    entry.site = site; entry.username = username;
-    entry.iv = encrypted.iv; entry.data = encrypted.data;
-    delete revealedPasswords[id];
-  } else {
-    vaultData.entries.push({
-      id: crypto.randomUUID(),
-      site, username,
-      iv: encrypted.iv, data: encrypted.data,
-      createdAt: Date.now()
-    });
+  try{
+    if(id){
+      const { error } = await supabase.from('vault_items').update({
+        category, site, username, iv:encrypted.iv, data:encrypted.data
+      }).eq('id', id);
+      if(error) throw error;
+      const entry = entries.find(x=>x.id===id);
+      Object.assign(entry, { category, site, username, iv:encrypted.iv, data:encrypted.data });
+      delete revealedPasswords[id];
+    } else {
+      const { data, error } = await supabase.from('vault_items').insert({
+        user_id: currentUser.id, category, site, username, iv:encrypted.iv, data:encrypted.data
+      }).select().single();
+      if(error) throw error;
+      entries.unshift(data);
+    }
+    closeEntryModal();
+    renderEntries();
+    showToast('Entry saved');
+  }catch(err){
+    document.getElementById('entryError').textContent = 'Could not save to the server.';
   }
-  await saveVault();
-  closeEntryModal();
-  renderEntries();
-  showToast('Entry saved');
 });
 
-/* password generator inside the modal */
+/* password generator */
 function generatePassword(length, useSymbols){
-  const sets = {
-    lower:'abcdefghijklmnopqrstuvwxyz',
-    upper:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    digits:'0123456789',
-    symbols:'!@#$%^&*()-_=+[]{}'
-  };
+  const sets = { lower:'abcdefghijklmnopqrstuvwxyz', upper:'ABCDEFGHIJKLMNOPQRSTUVWXYZ', digits:'0123456789', symbols:'!@#$%^&*()-_=+[]{}' };
   let charset = sets.lower + sets.upper + sets.digits + (useSymbols ? sets.symbols : '');
   const randoms = crypto.getRandomValues(new Uint32Array(length));
   let pwd = '';
@@ -872,7 +985,7 @@ document.getElementById('generateBtn').addEventListener('click', ()=>{
   document.getElementById('entryPassword').type = 'text';
 });
 
-/* show/hide toggles shared by every password-style field */
+/* show/hide toggles */
 document.addEventListener('click', e=>{
   const toggle = e.target.closest('.input-action[data-toggle]');
   if(!toggle) return;
@@ -883,7 +996,7 @@ document.addEventListener('click', e=>{
 });
 
 /* ============================================================
-   CHANGE MASTER PASSWORD
+   CHANGE MASTER KEY (re-encrypts everything)
    ============================================================ */
 document.getElementById('changePasswordForm').addEventListener('submit', async e=>{
   e.preventDefault();
@@ -893,62 +1006,41 @@ document.getElementById('changePasswordForm').addEventListener('submit', async e
   const next = document.getElementById('newPw').value;
   const confirm = document.getElementById('newPwConfirm').value;
 
-  if(next.length < 8){ errEl.textContent = 'New password must be at least 8 characters.'; return; }
-  if(next !== confirm){ errEl.textContent = 'New passwords do not match.'; return; }
+  if(next.length < 8){ errEl.textContent = 'New key must be at least 8 characters.'; return; }
+  if(next !== confirm){ errEl.textContent = 'New keys do not match.'; return; }
 
   try{
-    const checkKey = await deriveKey(current, vaultData.salt);
-    const check = await decryptText(checkKey, vaultData.verifier.iv, vaultData.verifier.data);
-    if(check !== 'vault-unlock-ok') throw new Error('wrong current password');
+    const checkKey = await deriveKey(current, vaultMeta.salt);
+    const check = await decryptText(checkKey, vaultMeta.verifier_iv, vaultMeta.verifier_data);
+    if(check !== 'vault-unlock-ok') throw new Error('wrong');
   }catch(err){
-    errEl.textContent = 'Current master password is incorrect.';
+    errEl.textContent = 'Current master key is incorrect.';
     return;
   }
 
-  // re-encrypt every entry with a freshly derived key + new salt
   const newSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)));
   const newKey = await deriveKey(next, newSalt);
 
-  for(const entry of vaultData.entries){
-    const payload = await decryptText(sessionKey, entry.iv, entry.data);
-    const reEncrypted = await encryptText(newKey, payload);
-    entry.iv = reEncrypted.iv;
-    entry.data = reEncrypted.data;
+  try{
+    // re-encrypt + push each entry
+    for(const entry of entries){
+      const payload = await decryptText(sessionKey, entry.iv, entry.data);
+      const re = await encryptText(newKey, payload);
+      const { error } = await supabase.from('vault_items').update({ iv:re.iv, data:re.data }).eq('id', entry.id);
+      if(error) throw error;
+      entry.iv = re.iv; entry.data = re.data;
+    }
+    const newVerifier = await encryptText(newKey, 'vault-unlock-ok');
+    await saveVaultMeta(newSalt, newVerifier);
+    vaultMeta.salt = newSalt;
+    vaultMeta.verifier_iv = newVerifier.iv;
+    vaultMeta.verifier_data = newVerifier.data;
+    sessionKey = newKey;
+    document.getElementById('changePasswordForm').reset();
+    showToast('Master key updated');
+  }catch(err){
+    errEl.textContent = 'Could not update on the server. Try again.';
   }
-  vaultData.salt = newSalt;
-  vaultData.verifier = await encryptText(newKey, 'vault-unlock-ok');
-  sessionKey = newKey;
-
-  await saveVault();
-  document.getElementById('changePasswordForm').reset();
-  showToast('Master password updated');
-});
-
-/* ============================================================
-   BACKUP EXPORT + ERASE VAULT
-   ============================================================ */
-document.getElementById('exportBtn').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(vaultData, null, 2)], { type:'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'cipher-vault-backup.json';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-  showToast('Backup downloaded — still fully encrypted');
-});
-
-document.getElementById('eraseVaultBtn').addEventListener('click', async ()=>{
-  if(!confirm('This permanently deletes every saved entry on this device. This cannot be undone. Continue?')) return;
-  try{ await window.storage.delete(STORAGE_KEY, false); }catch(e){}
-  sessionKey = null;
-  vaultData = null;
-  revealedPasswords = {};
-  clearTimeout(autoLockTimer);
-  show('view-setup');
-  showToast('Vault erased');
 });
 
 /* ============================================================
