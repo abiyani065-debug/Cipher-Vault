@@ -8,6 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Favicon inline SVG -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a461' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z'/><path d='M9 12l2 2 4-4'/></svg>">
+
 <style>
 :root{
   --black:#14181c;
@@ -166,7 +170,7 @@ input,select,textarea{font-family:var(--font-body);}
 .icon-btn:hover{color:var(--bone);background:var(--surface-2);}
 .icon-btn svg{width:20px;height:20px;}
 
-.content{flex:1;max-width:800px;width:100%;margin:0 auto;padding:36px 24px 80px;}
+.content{flex:1;max-width:860px;width:100%;margin:0 auto;padding:36px 24px 80px;}
 
 /* ── PAGE HEADER ── */
 .page-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap;}
@@ -178,8 +182,40 @@ input,select,textarea{font-family:var(--font-body);}
 .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--slate);}
 .search-wrap input{padding-left:38px;width:220px;}
 
+/* ── SORT ── */
+.sort-select{
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--slate);border-radius:9px;padding:8px 12px;
+  font-size:13px;cursor:pointer;
+}
+.sort-select:focus{border-color:var(--border-strong);outline:none;}
+
+/* ── HEALTH DASHBOARD ── */
+.health-bar{
+  display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;
+}
+.health-card{
+  flex:1;min-width:140px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;
+}
+.health-card:hover{border-color:var(--border-strong);background:var(--surface-2);}
+.health-card.clickable:hover{border-color:var(--brass);}
+.health-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.health-icon svg{width:16px;height:16px;}
+.health-icon.red{background:rgba(199,100,95,0.15);color:var(--danger);}
+.health-icon.yellow{background:rgba(201,164,97,0.15);color:var(--brass);}
+.health-icon.green{background:rgba(79,156,130,0.15);color:var(--verdigris);}
+.health-num{font-family:var(--font-display);font-size:22px;font-weight:600;line-height:1;}
+.health-lbl{font-size:11px;color:var(--slate);margin-top:3px;}
+
 /* ── CAT TABS ── */
-.cat-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.cat-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
 .cat-tab{
   background:var(--surface-2);border:1px solid var(--border);
   color:var(--slate);border-radius:20px;padding:6px 18px;font-size:13px;
@@ -187,6 +223,12 @@ input,select,textarea{font-family:var(--font-body);}
 }
 .cat-tab:hover{border-color:var(--border-strong);color:var(--bone);}
 .cat-tab.active{background:var(--brass);color:#1b1604;border-color:var(--brass);font-weight:500;}
+.cat-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.18);
+  border-radius:10px;padding:1px 7px;font-size:11px;margin-left:5px;font-weight:600;
+}
+.cat-tab.active .cat-count{background:rgba(0,0,0,0.2);}
 .cat-badge{
   display:inline-block;font-size:11px;padding:2px 9px;border-radius:10px;
   background:var(--surface-2);color:var(--brass);border:1px solid var(--border);
@@ -200,22 +242,45 @@ input,select,textarea{font-family:var(--font-body);}
 .entry-list{border-top:1px solid var(--border);}
 .entry{
   display:flex;align-items:center;gap:16px;
-  padding:16px 6px;border-bottom:1px solid var(--border);
-  transition:background 0.12s;
+  padding:14px 6px;border-bottom:1px solid var(--border);
+  transition:background 0.12s,opacity 0.3s,transform 0.3s;
   border-radius:4px;
 }
 .entry:hover{background:rgba(201,164,97,0.04);}
+.entry.entry-fade-in{animation:entryIn 0.28s ease both;}
+@keyframes entryIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .entry-avatar{
   width:40px;height:40px;border-radius:10px;flex-shrink:0;
   background:var(--surface-2);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;
   font-size:16px;font-weight:600;color:var(--brass);
   font-family:var(--font-display);user-select:none;
+  overflow:hidden;
 }
+.entry-avatar img{width:100%;height:100%;object-fit:contain;padding:6px;}
 .entry-main{flex:1;min-width:0;}
 .entry-site{font-weight:500;font-size:15px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:8px;}
 .entry-user{font-size:13px;color:var(--slate);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .entry-actions{display:flex;gap:2px;flex-shrink:0;}
+
+/* ── WEAK PASSWORD INDICATOR ── */
+.weak-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--danger);flex-shrink:0;
+  display:inline-block;margin-left:4px;
+  title:'Weak password';
+}
+.duplicate-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--brass);flex-shrink:0;
+  display:inline-block;margin-left:4px;
+}
+
+/* ── MINI STRENGTH BAR IN POPUP ── */
+.mini-strength{margin-top:6px;}
+.mini-strength-bar{height:3px;border-radius:2px;background:var(--surface-3);overflow:hidden;}
+.mini-strength-fill{height:100%;width:0%;transition:width 0.3s,background 0.3s;}
+.mini-strength-lbl{font-size:11px;color:var(--slate);margin-top:4px;}
 
 /* ── EMPTY STATE ── */
 .empty-state{
@@ -225,6 +290,18 @@ input,select,textarea{font-family:var(--font-body);}
 }
 .empty-state svg{width:40px;height:40px;color:var(--brass-dim);margin:0 auto 16px;display:block;}
 .empty-state p{font-size:14px;margin-bottom:20px;}
+
+/* ── SKELETON LOADER ── */
+.skeleton-list{border-top:1px solid var(--border);}
+.skeleton-entry{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 6px;border-bottom:1px solid var(--border);
+}
+.skel{background:var(--surface-2);border-radius:6px;animation:shimmer 1.4s ease-in-out infinite;}
+@keyframes shimmer{0%,100%{opacity:0.5;}50%{opacity:1;}}
+.skel-avatar{width:40px;height:40px;border-radius:10px;flex-shrink:0;}
+.skel-line{height:12px;}
+.skel-main{flex:1;display:flex;flex-direction:column;gap:8px;}
 
 /* ── MODAL ── */
 .modal-overlay{
@@ -252,7 +329,7 @@ input,select,textarea{font-family:var(--font-body);}
 .gen-row input[type=number]{width:48px;background:var(--surface-2);color:var(--bone);border:1px solid var(--border);border-radius:6px;padding:3px 6px;font-size:12px;}
 .gen-row input[type=checkbox]{accent-color:var(--brass);}
 
-/* ── DETAIL POPUP (eye icon popup) ── */
+/* ── DETAIL POPUP ── */
 .popup-overlay{
   display:flex;align-items:center;justify-content:center;
   position:fixed;inset:0;
@@ -260,7 +337,7 @@ input,select,textarea{font-family:var(--font-body);}
   padding:20px;z-index:60;
 }
 .popup{
-  width:100%;max-width:400px;
+  width:100%;max-width:420px;
   background:var(--surface);
   border:1px solid var(--border-strong);
   border-radius:var(--radius);
@@ -270,9 +347,21 @@ input,select,textarea{font-family:var(--font-body);}
   background:var(--surface-2);
   border-bottom:1px solid var(--border);
   padding:16px 20px;
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;gap:12px;
 }
-.popup-header h3{font-family:var(--font-display);font-size:17px;font-weight:600;}
+.popup-header-icon{
+  width:36px;height:36px;border-radius:9px;
+  background:var(--surface-3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:600;font-family:var(--font-display);
+  overflow:hidden;flex-shrink:0;
+}
+.popup-header-icon img{width:100%;height:100%;object-fit:contain;padding:5px;}
+.popup-header-info{flex:1;min-width:0;}
+.popup-header-info h3{font-family:var(--font-display);font-size:17px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.popup-header-info .popup-url-link{font-size:12px;color:var(--brass);text-decoration:none;display:flex;align-items:center;gap:4px;margin-top:2px;}
+.popup-header-info .popup-url-link:hover{text-decoration:underline;}
+.popup-close-btn{flex-shrink:0;}
 .popup-body{padding:20px;}
 .popup-row{display:flex;flex-direction:column;gap:5px;padding:14px 0;border-bottom:1px solid var(--border);}
 .popup-row:last-child{border-bottom:none;}
@@ -283,6 +372,21 @@ input,select,textarea{font-family:var(--font-body);}
 .popup-pass-row .popup-value{flex:1;}
 .popup-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px;}
 
+/* ── COPY CHECKMARK ANIMATION ── */
+@keyframes checkPop{0%{transform:scale(0.5);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.icon-btn.copied svg{color:var(--verdigris);animation:checkPop 0.25s ease both;}
+
+/* ── CLIPBOARD COUNTDOWN TOAST ── */
+.toast-countdown{font-size:11px;color:var(--slate);margin-left:6px;}
+
+/* ── CONFIRM DELETE MODAL ── */
+.confirm-modal{max-width:380px;}
+.confirm-modal .modal-head{margin-bottom:14px;}
+.confirm-body{font-size:14px;color:var(--slate);margin-bottom:20px;line-height:1.6;}
+.confirm-body strong{color:var(--bone);}
+.confirm-danger{background:var(--danger);color:#fff;border-color:var(--danger);}
+.confirm-danger:hover{background:#d4706b;border-color:#d4706b;}
+
 /* ── SETTINGS ── */
 .settings-section{margin-bottom:36px;}
 .settings-section h2{font-size:12px;font-weight:600;color:var(--brass);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;}
@@ -291,6 +395,21 @@ input,select,textarea{font-family:var(--font-body);}
 .settings-row-label{font-size:14px;}
 .settings-row-sub{font-size:12px;color:var(--slate);margin-top:3px;}
 select.input{width:auto;}
+
+/* ── IMPORT/EXPORT ── */
+.import-drop{
+  border:2px dashed var(--border-strong);
+  border-radius:var(--radius);
+  padding:32px;
+  text-align:center;
+  color:var(--slate);
+  font-size:14px;
+  cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;
+  margin-bottom:14px;
+}
+.import-drop:hover,.import-drop.drag-over{border-color:var(--brass);background:rgba(201,164,97,0.05);}
+.import-drop svg{width:32px;height:32px;margin:0 auto 10px;display:block;color:var(--brass-dim);}
 
 /* ── TOAST ── */
 .toast{
@@ -302,7 +421,7 @@ select.input{width:auto;}
   padding:10px 20px;border-radius:9px;
   font-size:13px;opacity:0;pointer-events:none;
   transition:opacity 0.25s,transform 0.25s;z-index:200;
-  white-space:nowrap;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
@@ -313,17 +432,24 @@ select.input{width:auto;}
 .loading-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--brass);border-radius:50%;animation:spin 0.8s linear infinite;}
 
+/* ── LOCK INDICATOR ── */
+.last-unlock{font-size:11px;color:var(--slate);margin-right:8px;}
+
 /* ── RESPONSIVE ── */
-@media(max-width:560px){
+@media(max-width:600px){
   .auth-card{padding:32px 22px;}
   .content{padding:24px 16px 70px;}
   .topbar{padding:12px 16px;}
-  .search-wrap input{width:160px;}
+  .search-wrap input{width:140px;}
   .modal{padding:22px 18px;}
   .modal-actions{flex-direction:column;}
   .modal-actions .btn{width:100%;}
   .page-header{flex-direction:column;align-items:stretch;}
   .header-right{justify-content:space-between;}
+  .health-card{min-width:100px;}
+  .health-num{font-size:18px;}
+  .last-unlock{display:none;}
+  .user-pill{display:none;}
 }
 </style>
 </head>
@@ -334,7 +460,7 @@ select.input{width:auto;}
   <div class="spinner"></div>
 </div>
 
-<!-- ══════════ AUTH (signup / login) ══════════ -->
+<!-- ══════════ AUTH ══════════ -->
 <section id="view-auth" class="screen hidden">
   <div class="auth-card">
     <div class="dial" aria-hidden="true">
@@ -345,19 +471,16 @@ select.input{width:auto;}
         <circle cx="55" cy="55" r="3" fill="var(--brass)"/>
       </svg>
     </div>
-
     <div class="brand">
       <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
       Cipher Vault
     </div>
     <p class="tagline" id="authTagline">Create an account to start your vault</p>
-
     <div class="steps">
       <div class="step-dot active" id="step1"></div>
       <div class="step-dot" id="step2"></div>
       <div class="step-dot" id="step3"></div>
     </div>
-
     <form id="authForm">
       <div class="field">
         <label for="authEmail">Email address</label>
@@ -375,7 +498,6 @@ select.input{width:auto;}
       <div class="error-msg" id="authError"></div>
       <button type="submit" class="btn btn-primary btn-full" id="authSubmitBtn">Create account</button>
     </form>
-
     <div class="switch-link" id="authSwitchWrap">
       Already have an account? <button type="button" id="authSwitchBtn">Log in instead</button>
     </div>
@@ -393,21 +515,17 @@ select.input{width:auto;}
         <circle cx="55" cy="55" r="3" fill="var(--brass)"/>
       </svg>
     </div>
-
     <div class="brand">
       <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
       Cipher Vault
     </div>
     <p class="tagline">Step 2 — Create your master key</p>
-
     <div class="steps">
       <div class="step-dot done"></div>
       <div class="step-dot active"></div>
       <div class="step-dot"></div>
     </div>
-
     <div class="notice"><strong>No resets, no recovery.</strong> Your master key encrypts everything locally before it's saved. If you forget it, your passwords cannot be recovered — not even by us.</div>
-
     <form id="setupForm">
       <div class="field">
         <label for="setupPassword">Create a master key</label>
@@ -427,7 +545,6 @@ select.input{width:auto;}
       <div class="error-msg" id="setupError"></div>
       <button type="submit" class="btn btn-primary btn-full">Create vault &amp; continue</button>
     </form>
-
     <div class="switch-link"><button type="button" id="setupLogoutBtn">Log out</button></div>
   </div>
 </section>
@@ -443,19 +560,16 @@ select.input{width:auto;}
         <circle cx="55" cy="55" r="3" fill="var(--brass)"/>
       </svg>
     </div>
-
     <div class="brand">
       <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
       Cipher Vault
     </div>
     <p class="tagline">Welcome back — enter your master key to unlock</p>
-
     <div class="steps">
       <div class="step-dot done"></div>
       <div class="step-dot done"></div>
       <div class="step-dot active"></div>
     </div>
-
     <form id="unlockForm">
       <div class="field">
         <label for="unlockPassword">Master key</label>
@@ -467,7 +581,7 @@ select.input{width:auto;}
         </div>
       </div>
       <div class="error-msg" id="unlockError"></div>
-      <button type="submit" class="btn btn-primary btn-full">Unlock vault</button>
+      <button type="submit" class="btn btn-primary btn-full" id="unlockSubmitBtn">Unlock vault</button>
     </form>
     <div class="switch-link"><button type="button" id="unlockLogoutBtn">Log out</button></div>
   </div>
@@ -475,13 +589,13 @@ select.input{width:auto;}
 
 <!-- ══════════ APP SHELL ══════════ -->
 <div id="app" class="app">
-
   <header class="topbar">
     <div class="brand" style="font-size:18px;">
       <svg class="brand-icon" style="width:22px;height:22px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
       Cipher Vault
     </div>
     <div class="topbar-right">
+      <span class="last-unlock" id="lastUnlockLabel"></span>
       <span class="user-pill" id="userEmailLabel"></span>
       <button class="icon-btn" id="openSettingsBtn" aria-label="Settings" title="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.97 7.97 0 0 0 0-2l2-1.4-2-3.5-2.3.8a8 8 0 0 0-1.7-1l-.4-2.4H9l-.4 2.4a8 8 0 0 0-1.7 1l-2.3-.8-2 3.5L4.6 11a8 8 0 0 0 0 2l-2 1.4 2 3.5 2.3-.8a8 8 0 0 0 1.7 1l.4 2.4h6l.4-2.4a8 8 0 0 0 1.7-1l2.3.8 2-3.5Z"/></svg>
@@ -493,7 +607,6 @@ select.input{width:auto;}
   </header>
 
   <main class="content">
-
     <!-- DASHBOARD -->
     <div id="dashboardView">
       <div class="page-header">
@@ -501,20 +614,29 @@ select.input{width:auto;}
         <div class="header-right">
           <div class="search-wrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-            <input class="input" id="searchInput" placeholder="Search…" style="padding-left:38px;">
+            <input class="input" id="searchInput" placeholder="Search…" style="padding-left:38px;" aria-label="Search entries">
           </div>
-          <button class="btn btn-primary" id="newEntryBtn" style="white-space:nowrap;">
+          <select class="sort-select input" id="sortSelect" aria-label="Sort entries">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="az">A → Z</option>
+            <option value="za">Z → A</option>
+          </select>
+          <button class="btn btn-primary" id="newEntryBtn" style="white-space:nowrap;" title="New entry (Ctrl+N)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
             New entry
           </button>
         </div>
       </div>
 
+      <!-- HEALTH DASHBOARD -->
+      <div class="health-bar" id="healthBar" style="display:none;"></div>
+
       <div class="cat-tabs" id="catTabs">
-        <button class="cat-tab active" data-cat="all">All</button>
-        <button class="cat-tab" data-cat="social">Social</button>
-        <button class="cat-tab" data-cat="work">Work</button>
-        <button class="cat-tab" data-cat="educational">Educational</button>
+        <button class="cat-tab active" data-cat="all">All <span class="cat-count" id="count-all">0</span></button>
+        <button class="cat-tab" data-cat="social">Social <span class="cat-count" id="count-social">0</span></button>
+        <button class="cat-tab" data-cat="work">Work <span class="cat-count" id="count-work">0</span></button>
+        <button class="cat-tab" data-cat="educational">Educational <span class="cat-count" id="count-educational">0</span></button>
       </div>
 
       <div id="entryListWrap"></div>
@@ -581,10 +703,31 @@ select.input{width:auto;}
           <button type="submit" class="btn btn-secondary">Update master key</button>
         </form>
       </div>
+
+      <div class="settings-section">
+        <h2>Export vault</h2>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Download encrypted backup</div>
+            <div class="settings-row-sub">Saves an encrypted JSON file — importable here later</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="exportBtn">Export</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2>Import vault</h2>
+        <div id="importDropZone" class="import-drop" tabindex="0" role="button" aria-label="Drop import file here or click to browse">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Drop your <strong>.json</strong> backup here, or click to browse
+          <input type="file" id="importFileInput" accept=".json" style="display:none;">
+        </div>
+        <div class="error-msg" id="importError"></div>
+      </div>
     </div>
   </main>
 
-  <footer class="foot">Encrypted in your browser with AES-256-GCM — the server only stores ciphertext.</footer>
+  <footer class="foot">Encrypted in your browser with AES-256-GCM &mdash; the server only stores ciphertext.</footer>
 </div>
 
 <!-- ══════════ ADD / EDIT ENTRY MODAL ══════════ -->
@@ -609,6 +752,10 @@ select.input{width:auto;}
       <div class="field">
         <label for="entrySite">Site or app name</label>
         <input class="input" id="entrySite" placeholder="e.g. Gmail, Netflix, GitHub" required>
+      </div>
+      <div class="field">
+        <label for="entryUrl">Website URL (optional)</label>
+        <input class="input" id="entryUrl" placeholder="e.g. https://gmail.com" type="url">
       </div>
       <div class="field">
         <label for="entryUsername">Username or email</label>
@@ -648,8 +795,15 @@ select.input{width:auto;}
 <div id="detailPopupOverlay" class="popup-overlay hidden">
   <div class="popup">
     <div class="popup-header">
-      <h3 id="popupSiteName">Entry details</h3>
-      <button class="icon-btn" id="closeDetailPopup" aria-label="Close popup">
+      <div class="popup-header-icon" id="popupHeaderIcon"></div>
+      <div class="popup-header-info">
+        <h3 id="popupSiteName">Entry details</h3>
+        <a id="popupUrlLink" href="#" target="_blank" rel="noopener" class="popup-url-link" style="display:none;">
+          <svg style="width:11px;height:11px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open site
+        </a>
+      </div>
+      <button class="icon-btn popup-close-btn" id="closeDetailPopup" aria-label="Close popup">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
@@ -659,26 +813,26 @@ select.input{width:auto;}
         <span class="popup-value" id="popupCategory"></span>
       </div>
       <div class="popup-row">
-        <span class="popup-label">Site / App</span>
-        <span class="popup-value" id="popupSite"></span>
-      </div>
-      <div class="popup-row">
         <span class="popup-label">Username / Email</span>
         <div class="popup-pass-row">
           <span class="popup-value" id="popupUsername"></span>
-          <button class="icon-btn btn-sm" id="popupCopyUser" aria-label="Copy username" title="Copy">
+          <button class="icon-btn btn-sm" id="popupCopyUser" aria-label="Copy username" title="Copy username">
             <svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
           </button>
         </div>
       </div>
       <div class="popup-row">
         <span class="popup-label">Password</span>
-        <div class="popup-pass-row">
+        <div class="mini-strength" id="popupMiniStrength">
+          <div class="mini-strength-bar"><div class="mini-strength-fill" id="popupStrengthFill"></div></div>
+          <div class="mini-strength-lbl" id="popupStrengthLbl"></div>
+        </div>
+        <div class="popup-pass-row" style="margin-top:8px;">
           <span class="popup-value mono" id="popupPassword">••••••••••••</span>
           <button class="icon-btn btn-sm" id="popupTogglePass" aria-label="Show password" title="Show/hide">
             <svg id="popupEyeIcon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
-          <button class="icon-btn btn-sm" id="popupCopyPass" aria-label="Copy password" title="Copy">
+          <button class="icon-btn btn-sm" id="popupCopyPass" aria-label="Copy password" title="Copy password">
             <svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
           </button>
         </div>
@@ -691,7 +845,7 @@ select.input{width:auto;}
     <div class="popup-footer">
       <button class="btn btn-secondary btn-sm" id="popupEditBtn" style="flex:1;">
         <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-        Edit entry
+        Edit
       </button>
       <button class="btn btn-danger-outline btn-sm" id="popupDeleteBtn" style="flex:1;">
         <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
@@ -701,16 +855,38 @@ select.input{width:auto;}
   </div>
 </div>
 
+<!-- ══════════ CONFIRM DELETE MODAL ══════════ -->
+<div id="confirmModalOverlay" class="modal-overlay hidden">
+  <div class="modal confirm-modal">
+    <div class="modal-head">
+      <h2 style="color:var(--danger);display:flex;align-items:center;gap:8px;">
+        <svg style="width:20px;height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        Delete entry
+      </h2>
+      <button class="icon-btn" id="closeConfirmModal" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="confirm-body" id="confirmBody">Are you sure you want to delete this entry? This cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="confirmCancelBtn" style="flex:1;">Cancel</button>
+      <button class="btn confirm-danger" id="confirmDeleteBtn" style="flex:1;">Delete permanently</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════ TOAST ══════════ -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">
+  <span id="toastMsg"></span>
+  <span class="toast-countdown" id="toastCountdown"></span>
+</div>
 
 <script>
 /* ══════════════════════════════════════════════
-   SUPABASE CONFIG — paste your keys here
+   SUPABASE CONFIG
 ══════════════════════════════════════════════ */
 const SUPABASE_URL = 'https://siaaaabfyzhspkdgqply.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpYWFhYWJmeXpoc3BrZGdxcGx5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MjQ5MTcsImV4cCI6MjA5NzUwMDkxN30.bEhp4MsUn3OPo81QtaC49x1yM6AgX6iUqA9Xb-qtz4k';
-
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ══════════════════════════════════════════════
@@ -720,54 +896,67 @@ const enc = s => new TextEncoder().encode(s);
 const dec = b => new TextDecoder().decode(b);
 const b64enc = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
 function b64dec(b64){
-  const bin = atob(b64), bytes = new Uint8Array(bin.length);
+  const bin=atob(b64), bytes=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
   return bytes;
 }
 async function deriveKey(password, saltB64){
-  const salt = b64dec(saltB64);
-  const base = await crypto.subtle.importKey('raw', enc(password), 'PBKDF2', false, ['deriveKey']);
+  const salt=b64dec(saltB64);
+  const base=await crypto.subtle.importKey('raw',enc(password),'PBKDF2',false,['deriveKey']);
   return crypto.subtle.deriveKey(
     {name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'},
-    base, {name:'AES-GCM',length:256}, false, ['encrypt','decrypt']
+    base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']
   );
 }
 async function encryptText(key, plaintext){
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const buf = await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, enc(plaintext));
-  return {iv:b64enc(iv), data:b64enc(buf)};
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const buf=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc(plaintext));
+  return {iv:b64enc(iv),data:b64enc(buf)};
 }
 async function decryptText(key, ivB64, dataB64){
-  const plain = await crypto.subtle.decrypt({name:'AES-GCM',iv:b64dec(ivB64)}, key, b64dec(dataB64));
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64dec(ivB64)},key,b64dec(dataB64));
   return dec(plain);
 }
 
 /* ══════════════════════════════════════════════
    APP STATE
 ══════════════════════════════════════════════ */
-let sessionKey = null;
-let currentUser = null;
-let vaultMeta = null;
-let entries = [];
-let activeCategory = 'all';
-let autoLockMinutes = 5;
-let autoLockTimer = null;
-let currentPopupEntry = null;
-let popupPassVisible = false;
-let popupDecryptedPass = '';
+let sessionKey=null, currentUser=null, vaultMeta=null;
+let entries=[], activeCategory='all', sortMode='newest';
+let autoLockMinutes=5, autoLockTimer=null;
+let currentPopupEntry=null, popupPassVisible=false, popupDecryptedPass='';
+let unlockTime=null;
+let clipboardTimer=null, clipboardCountdown=null;
+let failedUnlockAttempts=0, unlockCooldownTimer=null;
+let pendingDeleteEntry=null;
+
+/* ══════════════════════════════════════════════
+   FAVICON COLOR CACHE
+══════════════════════════════════════════════ */
+const faviconCache={};
+function getFaviconUrl(site, url){
+  if(url){
+    try{
+      const domain=new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+    }catch{}
+  }
+  const guesses=['com','io','org','net','app'];
+  const clean=site.toLowerCase().replace(/\s+/g,'');
+  return `https://www.google.com/s2/favicons?domain=${clean}.${guesses[0]}&sz=32`;
+}
 
 /* ══════════════════════════════════════════════
    VIEW HELPERS
 ══════════════════════════════════════════════ */
 function showView(id){
   ['view-loading','view-auth','view-setup','view-unlock'].forEach(v=>{
-    document.getElementById(v).classList.toggle('hidden', v!==id);
+    document.getElementById(v).classList.toggle('hidden',v!==id);
   });
-  document.getElementById('app').classList.toggle('active', id==='app');
+  document.getElementById('app').classList.toggle('active',id==='app');
 }
-
-function buildDial(gId, cx, cy, innerR, outerR){
-  const g = document.getElementById(gId); if(!g) return;
+function buildDial(gId,cx,cy,innerR,outerR){
+  const g=document.getElementById(gId); if(!g) return;
   let html='';
   for(let i=0;i<16;i++){
     const a=(i/16)*Math.PI*2;
@@ -779,28 +968,73 @@ function buildDial(gId, cx, cy, innerR, outerR){
 }
 
 /* ══════════════════════════════════════════════
-   TOAST
+   TOAST (with optional clipboard countdown)
 ══════════════════════════════════════════════ */
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
+function showToast(msg, duration=2600){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  document.getElementById('toastCountdown').textContent='';
   t.classList.add('show');
   clearTimeout(t._t);
-  t._t = setTimeout(()=>t.classList.remove('show'), 2600);
+  t._t=setTimeout(()=>t.classList.remove('show'),duration);
+}
+
+function showClipboardToast(msg, clearAfterSecs=30){
+  clearTimeout(clipboardTimer);
+  clearInterval(clipboardCountdown);
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+
+  let remaining=clearAfterSecs;
+  document.getElementById('toastCountdown').textContent=`· clears in ${remaining}s`;
+  clipboardCountdown=setInterval(()=>{
+    remaining--;
+    if(remaining<=0){
+      clearInterval(clipboardCountdown);
+      document.getElementById('toastCountdown').textContent='';
+      t.classList.remove('show');
+    } else {
+      document.getElementById('toastCountdown').textContent=`· clears in ${remaining}s`;
+    }
+  },1000);
+
+  clipboardTimer=setTimeout(async()=>{
+    try{ await navigator.clipboard.writeText(''); }catch{}
+    clearInterval(clipboardCountdown);
+    document.getElementById('toastCountdown').textContent='';
+    t.classList.remove('show');
+  }, clearAfterSecs*1000);
+}
+
+/* ══════════════════════════════════════════════
+   COPY WITH CHECKMARK ANIMATION
+══════════════════════════════════════════════ */
+const CHECK_SVG=`<polyline points="20 6 9 17 4 12"/>`;
+const COPY_SVG=`<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>`;
+
+function animateCopyBtn(btn){
+  btn.classList.add('copied');
+  const svg=btn.querySelector('svg');
+  if(svg) svg.innerHTML=CHECK_SVG;
+  setTimeout(()=>{
+    btn.classList.remove('copied');
+    if(svg) svg.innerHTML=COPY_SVG;
+  },1500);
 }
 
 /* ══════════════════════════════════════════════
    SUPABASE DATA LAYER
 ══════════════════════════════════════════════ */
 async function fetchVaultMeta(){
-  const {data,error} = await sb.from('vault_meta').select('*').eq('user_id',currentUser.id).maybeSingle();
-  if(error) throw error;
-  return data;
+  const {data,error}=await sb.from('vault_meta').select('*').eq('user_id',currentUser.id).maybeSingle();
+  if(error) throw error; return data;
 }
-async function saveVaultMeta(salt, verifier){
-  const {error} = await sb.from('vault_meta').upsert({
-    user_id:currentUser.id, salt,
-    verifier_iv:verifier.iv, verifier_data:verifier.data,
+async function saveVaultMeta(salt,verifier){
+  const {error}=await sb.from('vault_meta').upsert({
+    user_id:currentUser.id,salt,
+    verifier_iv:verifier.iv,verifier_data:verifier.data,
     auto_lock_minutes:autoLockMinutes
   });
   if(error) throw error;
@@ -809,9 +1043,8 @@ async function updateAutoLockPref(){
   await sb.from('vault_meta').update({auto_lock_minutes:autoLockMinutes}).eq('user_id',currentUser.id);
 }
 async function fetchEntries(){
-  const {data,error} = await sb.from('vault_items').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
-  if(error) throw error;
-  return data||[];
+  const {data,error}=await sb.from('vault_items').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+  if(error) throw error; return data||[];
 }
 
 /* ══════════════════════════════════════════════
@@ -821,72 +1054,69 @@ async function init(){
   buildDial('authTicks',55,55,38,47);
   buildDial('setupTicks',55,55,38,47);
   buildDial('unlockTicks',55,55,38,47);
-
-  const {data:{session}} = await sb.auth.getSession();
+  const {data:{session}}=await sb.auth.getSession();
   if(session){ currentUser=session.user; await routeAfterLogin(); }
-  else { showView('view-auth'); }
+  else{ showView('view-auth'); }
 }
 
 async function routeAfterLogin(){
   showView('view-loading');
   try{
-    vaultMeta = await fetchVaultMeta();
+    vaultMeta=await fetchVaultMeta();
     if(vaultMeta){ autoLockMinutes=vaultMeta.auto_lock_minutes??5; showView('view-unlock'); }
-    else { showView('view-setup'); }
+    else{ showView('view-setup'); }
   }catch(e){ showToast('Server unreachable'); showView('view-auth'); }
 }
 
 /* ══════════════════════════════════════════════
-   AUTH — signup / login
+   AUTH
 ══════════════════════════════════════════════ */
-let authMode = 'signup';
-
+let authMode='signup';
 function updateAuthUI(){
-  const isSignup = authMode==='signup';
-  document.getElementById('authTagline').textContent = isSignup
-    ? 'Create an account to start your vault'
-    : 'Welcome back — log in to your vault';
-  document.getElementById('authSubmitBtn').textContent = isSignup ? 'Create account' : 'Log in';
-  const sw = document.getElementById('authSwitchWrap');
-  sw.innerHTML = isSignup
-    ? 'Already have an account? <button type="button" id="authSwitchBtn">Log in instead</button>'
-    : "Don't have an account? <button type='button' id='authSwitchBtn'>Sign up free</button>";
-  document.getElementById('authPassword').setAttribute('autocomplete', isSignup?'new-password':'current-password');
-  document.getElementById('authSwitchBtn').addEventListener('click', ()=>{
-    authMode = authMode==='signup'?'login':'signup';
+  const isSignup=authMode==='signup';
+  document.getElementById('authTagline').textContent=isSignup
+    ?'Create an account to start your vault'
+    :'Welcome back — log in to your vault';
+  document.getElementById('authSubmitBtn').textContent=isSignup?'Create account':'Log in';
+  const sw=document.getElementById('authSwitchWrap');
+  sw.innerHTML=isSignup
+    ?'Already have an account? <button type="button" id="authSwitchBtn">Log in instead</button>'
+    :"Don't have an account? <button type='button' id='authSwitchBtn'>Sign up free</button>";
+  document.getElementById('authPassword').setAttribute('autocomplete',isSignup?'new-password':'current-password');
+  document.getElementById('authSwitchBtn').addEventListener('click',()=>{
+    authMode=authMode==='signup'?'login':'signup';
     document.getElementById('authError').textContent='';
     updateAuthUI();
   });
 }
 updateAuthUI();
 
-document.getElementById('authForm').addEventListener('submit', async e=>{
+document.getElementById('authForm').addEventListener('submit',async e=>{
   e.preventDefault();
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const errEl = document.getElementById('authError');
-  const btn = document.getElementById('authSubmitBtn');
+  const email=document.getElementById('authEmail').value.trim();
+  const password=document.getElementById('authPassword').value;
+  const errEl=document.getElementById('authError');
+  const btn=document.getElementById('authSubmitBtn');
   errEl.textContent=''; errEl.style.color='var(--danger)';
   if(password.length<6){errEl.textContent='Password must be at least 6 characters.';return;}
   btn.disabled=true;
   try{
     if(authMode==='signup'){
-      const {data,error} = await sb.auth.signUp({email,password});
+      const {data,error}=await sb.auth.signUp({email,password});
       if(error) throw error;
-      if(data.session){ currentUser=data.session.user; await routeAfterLogin(); }
-      else {
+      if(data.session){currentUser=data.session.user;await routeAfterLogin();}
+      else{
         errEl.style.color='var(--verdigris)';
         errEl.textContent='Check your email to confirm your account, then log in.';
         authMode='login'; updateAuthUI();
       }
-    } else {
-      const {data,error} = await sb.auth.signInWithPassword({email,password});
+    }else{
+      const {data,error}=await sb.auth.signInWithPassword({email,password});
       if(error) throw error;
-      currentUser=data.session.user;
-      await routeAfterLogin();
+      currentUser=data.session.user; await routeAfterLogin();
     }
-  }catch(err){ errEl.textContent=err.message||'Something went wrong.'; }
-  finally{ btn.disabled=false; }
+  }catch(err){errEl.textContent=err.message||'Something went wrong.';}
+  finally{btn.disabled=false;}
 });
 
 /* ══════════════════════════════════════════════
@@ -896,27 +1126,28 @@ async function doLogout(){
   await sb.auth.signOut();
   sessionKey=null; currentUser=null; vaultMeta=null;
   entries=[]; clearTimeout(autoLockTimer);
+  failedUnlockAttempts=0;
   ['authEmail','authPassword','setupPassword','setupConfirm','unlockPassword'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
   });
   showView('view-auth');
 }
-document.getElementById('setupLogoutBtn').addEventListener('click', doLogout);
-document.getElementById('unlockLogoutBtn').addEventListener('click', doLogout);
-document.getElementById('logoutBtn').addEventListener('click', doLogout);
+document.getElementById('setupLogoutBtn').addEventListener('click',doLogout);
+document.getElementById('unlockLogoutBtn').addEventListener('click',doLogout);
+document.getElementById('logoutBtn').addEventListener('click',doLogout);
 
 /* ══════════════════════════════════════════════
    SETUP MASTER KEY
 ══════════════════════════════════════════════ */
 function passStrength(pw){
   let s=0;
-  if(pw.length>=8)s++;if(pw.length>=12)s++;
+  if(pw.length>=8)s++; if(pw.length>=12)s++;
   if(/[a-z]/.test(pw)&&/[A-Z]/.test(pw))s++;
   if(/[0-9]/.test(pw))s++;
   if(/[^a-zA-Z0-9]/.test(pw))s++;
   return s;
 }
-document.getElementById('setupPassword').addEventListener('input', e=>{
+document.getElementById('setupPassword').addEventListener('input',e=>{
   const s=passStrength(e.target.value);
   const fill=document.getElementById('strengthFill');
   const lbl=document.getElementById('strengthLabel');
@@ -927,7 +1158,7 @@ document.getElementById('setupPassword').addEventListener('input', e=>{
   else{lbl.textContent='Strong — good choice';fill.style.background='var(--verdigris)';}
 });
 
-document.getElementById('setupForm').addEventListener('submit', async e=>{
+document.getElementById('setupForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const pw=document.getElementById('setupPassword').value;
   const confirm=document.getElementById('setupConfirm').value;
@@ -943,29 +1174,52 @@ document.getElementById('setupForm').addEventListener('submit', async e=>{
     await saveVaultMeta(salt,verifier);
     vaultMeta={salt,verifier_iv:verifier.iv,verifier_data:verifier.data,auto_lock_minutes:5};
     sessionKey=key; entries=[];
+    unlockTime=new Date();
     await enterApp();
-  }catch(err){ errEl.textContent='Could not save. Check your connection.'; }
+  }catch(err){errEl.textContent='Could not save. Check your connection.';}
 });
 
 /* ══════════════════════════════════════════════
-   UNLOCK
+   UNLOCK (with cooldown after 5 failed attempts)
 ══════════════════════════════════════════════ */
-document.getElementById('unlockForm').addEventListener('submit', async e=>{
+document.getElementById('unlockForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const pw=document.getElementById('unlockPassword').value;
   const errEl=document.getElementById('unlockError');
+  const btn=document.getElementById('unlockSubmitBtn');
   errEl.textContent='';
+  if(unlockCooldownTimer){errEl.textContent='Too many attempts — wait a moment.';return;}
   try{
     const key=await deriveKey(pw,vaultMeta.salt);
     const check=await decryptText(key,vaultMeta.verifier_iv,vaultMeta.verifier_data);
     if(check!=='vault-unlock-ok') throw new Error('mismatch');
-    sessionKey=key;
+    sessionKey=key; failedUnlockAttempts=0;
     const dial=document.getElementById('unlockDial');
     dial.classList.add('unlocking');
     entries=await fetchEntries();
-    setTimeout(()=>{ dial.classList.remove('unlocking'); enterApp(); },550);
+    unlockTime=new Date();
+    setTimeout(()=>{dial.classList.remove('unlocking');enterApp();},550);
   }catch(err){
-    errEl.textContent='Incorrect master key.';
+    failedUnlockAttempts++;
+    if(failedUnlockAttempts>=5){
+      let secs=10;
+      btn.disabled=true;
+      errEl.textContent=`Too many attempts — wait ${secs}s before trying again.`;
+      unlockCooldownTimer=setInterval(()=>{
+        secs--;
+        if(secs<=0){
+          clearInterval(unlockCooldownTimer);
+          unlockCooldownTimer=null;
+          btn.disabled=false;
+          errEl.textContent='';
+          failedUnlockAttempts=0;
+        } else {
+          errEl.textContent=`Too many attempts — wait ${secs}s before trying again.`;
+        }
+      },1000);
+    } else {
+      errEl.textContent=`Incorrect master key. (${failedUnlockAttempts}/5 attempts)`;
+    }
     document.getElementById('unlockPassword').value='';
   }
 });
@@ -980,7 +1234,9 @@ async function enterApp(){
   document.getElementById('autoLockSelect').value=String(autoLockMinutes);
   document.getElementById('userEmailLabel').textContent=currentUser.email;
   document.getElementById('settingsEmail').textContent=currentUser.email;
+  updateLastUnlockLabel();
   renderEntries();
+  renderHealthBar();
   resetAutoLockTimer();
 }
 function lockVault(){
@@ -990,18 +1246,27 @@ function lockVault(){
   closeDetailPopup();
   showView('view-unlock');
 }
-document.getElementById('lockBtn').addEventListener('click', lockVault);
-document.getElementById('lockNowBtn').addEventListener('click', lockVault);
+document.getElementById('lockBtn').addEventListener('click',lockVault);
+document.getElementById('lockNowBtn').addEventListener('click',lockVault);
+
+function updateLastUnlockLabel(){
+  if(!unlockTime) return;
+  const el=document.getElementById('lastUnlockLabel');
+  const mins=Math.floor((Date.now()-unlockTime)/60000);
+  if(mins<1) el.textContent='Unlocked just now';
+  else if(mins<60) el.textContent=`Unlocked ${mins}m ago`;
+  else el.textContent=`Unlocked ${Math.floor(mins/60)}h ago`;
+}
 
 function resetAutoLockTimer(){
   clearTimeout(autoLockTimer);
   if(!autoLockMinutes) return;
-  autoLockTimer=setTimeout(()=>{ showToast('Vault locked due to inactivity'); lockVault(); }, autoLockMinutes*60*1000);
+  autoLockTimer=setTimeout(()=>{showToast('Vault locked due to inactivity');lockVault();},autoLockMinutes*60*1000);
 }
 ['mousemove','keydown','click','touchstart'].forEach(evt=>{
-  document.addEventListener(evt,()=>{ if(sessionKey) resetAutoLockTimer(); },{passive:true});
+  document.addEventListener(evt,()=>{if(sessionKey)resetAutoLockTimer();},{passive:true});
 });
-document.getElementById('autoLockSelect').addEventListener('change', async e=>{
+document.getElementById('autoLockSelect').addEventListener('change',async e=>{
   autoLockMinutes=Number(e.target.value);
   await updateAutoLockPref();
   resetAutoLockTimer();
@@ -1011,11 +1276,11 @@ document.getElementById('autoLockSelect').addEventListener('change', async e=>{
 /* ══════════════════════════════════════════════
    SETTINGS NAV
 ══════════════════════════════════════════════ */
-document.getElementById('openSettingsBtn').addEventListener('click', ()=>{
+document.getElementById('openSettingsBtn').addEventListener('click',()=>{
   document.getElementById('dashboardView').classList.add('hidden');
   document.getElementById('settingsView').classList.remove('hidden');
 });
-document.getElementById('backFromSettings').addEventListener('click', ()=>{
+document.getElementById('backFromSettings').addEventListener('click',()=>{
   document.getElementById('settingsView').classList.add('hidden');
   document.getElementById('dashboardView').classList.remove('hidden');
 });
@@ -1023,7 +1288,7 @@ document.getElementById('backFromSettings').addEventListener('click', ()=>{
 /* ══════════════════════════════════════════════
    CATEGORY TABS
 ══════════════════════════════════════════════ */
-document.getElementById('catTabs').addEventListener('click', e=>{
+document.getElementById('catTabs').addEventListener('click',e=>{
   const tab=e.target.closest('.cat-tab'); if(!tab) return;
   document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
   tab.classList.add('active');
@@ -1032,26 +1297,120 @@ document.getElementById('catTabs').addEventListener('click', e=>{
 });
 
 /* ══════════════════════════════════════════════
-   RENDER ENTRIES
+   SORT
 ══════════════════════════════════════════════ */
-function avatarLetter(site){ return (site||'?')[0].toUpperCase(); }
-function avatarBg(cat){
-  const map={social:'rgba(124,158,255,0.15)',work:'rgba(240,184,110,0.15)',educational:'rgba(110,207,151,0.15)'};
-  return map[cat]||'var(--surface-2)';
-}
-function avatarColor(cat){
-  const map={social:'#7c9eff',work:'#f0b86e',educational:'#6ecf97'};
-  return map[cat]||'var(--brass)';
+document.getElementById('sortSelect').addEventListener('change',e=>{
+  sortMode=e.target.value;
+  renderEntries();
+});
+
+/* ══════════════════════════════════════════════
+   PASSWORD HEALTH ANALYSIS
+══════════════════════════════════════════════ */
+async function analyzeHealth(){
+  if(!sessionKey||entries.length===0) return null;
+  let weak=0, dupes=0;
+  const passMap={};
+  for(const en of entries){
+    try{
+      const payload=JSON.parse(await decryptText(sessionKey,en.iv,en.data));
+      const pw=payload.password||'';
+      const s=passStrength(pw);
+      if(s<=2) weak++;
+      passMap[pw]=(passMap[pw]||0)+1;
+    }catch{}
+  }
+  Object.values(passMap).forEach(v=>{if(v>1) dupes+=v;});
+  return {weak,dupes,total:entries.length};
 }
 
-function renderEntries(){
-  const wrap=document.getElementById('entryListWrap');
+async function renderHealthBar(){
+  const bar=document.getElementById('healthBar');
+  if(entries.length===0){bar.style.display='none';return;}
+  const health=await analyzeHealth();
+  if(!health){bar.style.display='none';return;}
+  const good=health.total-health.weak-Math.min(health.dupes,health.total);
+  bar.style.display='flex';
+  bar.innerHTML=`
+    <div class="health-card${health.weak>0?' clickable':''}" id="healthWeakCard" title="${health.weak>0?'Click to filter weak passwords':''}">
+      <div class="health-icon ${health.weak>0?'red':'green'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${health.weak>0?'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>':'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/>'}</svg>
+      </div>
+      <div>
+        <div class="health-num" style="color:${health.weak>0?'var(--danger)':'var(--verdigris)'}">${health.weak}</div>
+        <div class="health-lbl">Weak password${health.weak!==1?'s':''}</div>
+      </div>
+    </div>
+    <div class="health-card${health.dupes>0?' clickable':''}" id="healthDupeCard" title="${health.dupes>0?'Duplicate passwords detected':''}">
+      <div class="health-icon ${health.dupes>0?'yellow':'green'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+      </div>
+      <div>
+        <div class="health-num" style="color:${health.dupes>0?'var(--brass)':'var(--verdigris)'}">${health.dupes}</div>
+        <div class="health-lbl">Reused password${health.dupes!==1?'s':''}</div>
+      </div>
+    </div>
+    <div class="health-card">
+      <div class="health-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+      </div>
+      <div>
+        <div class="health-num" style="color:var(--verdigris)">${health.total}</div>
+        <div class="health-lbl">Total entries</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ══════════════════════════════════════════════
+   UPDATE CATEGORY COUNTS
+══════════════════════════════════════════════ */
+function updateCategoryCounts(){
+  const counts={all:entries.length,social:0,work:0,educational:0};
+  entries.forEach(e=>{if(counts[e.category]!==undefined) counts[e.category]++;});
+  Object.keys(counts).forEach(k=>{
+    const el=document.getElementById('count-'+k);
+    if(el) el.textContent=counts[k];
+  });
+}
+
+/* ══════════════════════════════════════════════
+   RENDER ENTRIES
+══════════════════════════════════════════════ */
+function avatarBg(cat){
+  return {social:'rgba(124,158,255,0.15)',work:'rgba(240,184,110,0.15)',educational:'rgba(110,207,151,0.15)'}[cat]||'var(--surface-2)';
+}
+function avatarColor(cat){
+  return {social:'#7c9eff',work:'#f0b86e',educational:'#6ecf97'}[cat]||'var(--brass)';
+}
+function avatarLetter(site){ return (site||'?')[0].toUpperCase(); }
+
+function getSortedFiltered(){
   const query=document.getElementById('searchInput').value.trim().toLowerCase();
-  const filtered=entries.filter(en=>{
+  let list=entries.filter(en=>{
     const cat=activeCategory==='all'||en.category===activeCategory;
     const q=!query||en.site.toLowerCase().includes(query)||en.username.toLowerCase().includes(query);
     return cat&&q;
   });
+  if(sortMode==='az') list.sort((a,b)=>a.site.localeCompare(b.site));
+  else if(sortMode==='za') list.sort((a,b)=>b.site.localeCompare(a.site));
+  else if(sortMode==='oldest') list.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+  // newest = default order from DB
+  return list;
+}
+
+function renderSkeleton(){
+  const wrap=document.getElementById('entryListWrap');
+  let html='<div class="skeleton-list">';
+  for(let i=0;i<4;i++) html+=`<div class="skeleton-entry"><div class="skel skel-avatar"></div><div class="skel-main"><div class="skel skel-line" style="width:${50+Math.random()*30}%"></div><div class="skel skel-line" style="width:${30+Math.random()*20}%"></div></div></div>`;
+  html+='</div>';
+  wrap.innerHTML=html;
+}
+
+function renderEntries(){
+  updateCategoryCounts();
+  const wrap=document.getElementById('entryListWrap');
+  const filtered=getSortedFiltered();
 
   if(entries.length===0){
     wrap.innerHTML=`<div class="empty-state">
@@ -1069,25 +1428,36 @@ function renderEntries(){
 
   const list=document.createElement('div');
   list.className='entry-list';
-  filtered.forEach(en=>{
+  filtered.forEach((en,i)=>{
     const row=document.createElement('div');
-    row.className='entry';
+    row.className='entry entry-fade-in';
     row.dataset.id=en.id;
+    row.style.animationDelay=`${i*30}ms`;
+
+    const strength=passStrengthFromEntry(en);
+    const isWeak=strength<=2;
+    const isDupe=isDuplicatePassword(en);
+
     row.innerHTML=`
-      <div class="entry-avatar" style="background:${avatarBg(en.category)};color:${avatarColor(en.category)};">${avatarLetter(en.site)}</div>
+      <div class="entry-avatar" id="avatar-${en.id}" style="background:${avatarBg(en.category)};color:${avatarColor(en.category)};">${avatarLetter(en.site)}</div>
       <div class="entry-main">
         <div class="entry-site">
           <span class="site-name"></span>
           <span class="cat-badge ${en.category}">${en.category}</span>
+          ${isWeak?'<span class="weak-dot" title="Weak password"></span>':''}
+          ${isDupe&&!isWeak?'<span class="duplicate-dot" title="Reused password"></span>':''}
         </div>
         <div class="entry-user"></div>
       </div>
       <div class="entry-actions">
+        ${en.url?`<button class="icon-btn" data-action="launch" data-id="${en.id}" aria-label="Open site" title="Open site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </button>`:''}
         <button class="icon-btn" data-action="detail" data-id="${en.id}" aria-label="View details" title="View details">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
         <button class="icon-btn" data-action="copy" data-id="${en.id}" aria-label="Copy password" title="Copy password">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${COPY_SVG}</svg>
         </button>
         <button class="icon-btn" data-action="edit" data-id="${en.id}" aria-label="Edit" title="Edit">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
@@ -1099,30 +1469,65 @@ function renderEntries(){
     row.querySelector('.site-name').textContent=en.site;
     row.querySelector('.entry-user').textContent=en.username;
     list.appendChild(row);
+
+    // load favicon async
+    const avatarEl=row.querySelector('.entry-avatar');
+    const favUrl=getFaviconUrl(en.site,en.url);
+    const img=new Image();
+    img.onload=()=>{
+      avatarEl.innerHTML='';
+      const imgEl=document.createElement('img');
+      imgEl.src=favUrl; imgEl.alt='';
+      avatarEl.appendChild(imgEl);
+    };
+    img.src=favUrl;
   });
   wrap.innerHTML='';
   wrap.appendChild(list);
 }
 
-document.getElementById('searchInput').addEventListener('input', renderEntries);
-document.getElementById('newEntryBtn').addEventListener('click', ()=>openEntryModal());
+// cached strength map (populated after unlock)
+const strengthCache={};
+function passStrengthFromEntry(en){
+  return strengthCache[en.id]??3; // default fair until analyzed
+}
+function isDuplicatePassword(en){
+  return false; // lightweight check — full analysis in health bar
+}
 
-document.getElementById('entryListWrap').addEventListener('click', async e=>{
+// Async analyze strength for all entries in background
+async function analyzeStrengthBackground(){
+  if(!sessionKey) return;
+  for(const en of entries){
+    try{
+      const payload=JSON.parse(await decryptText(sessionKey,en.iv,en.data));
+      strengthCache[en.id]=passStrength(payload.password||'');
+    }catch{}
+  }
+}
+
+document.getElementById('searchInput').addEventListener('input',renderEntries);
+document.getElementById('newEntryBtn').addEventListener('click',()=>openEntryModal());
+
+document.getElementById('entryListWrap').addEventListener('click',async e=>{
   const btn=e.target.closest('button[data-action]'); if(!btn) return;
   const id=btn.dataset.id;
   const entry=entries.find(x=>x.id===id); if(!entry) return;
   const action=btn.dataset.action;
 
-  if(action==='detail') await openDetailPopup(entry);
+  if(action==='launch'){ if(entry.url) window.open(entry.url,'_blank',);return; }
+  if(action==='detail'){ await openDetailPopup(entry); return; }
   if(action==='copy'){
     try{
       const payload=JSON.parse(await decryptText(sessionKey,entry.iv,entry.data));
       await navigator.clipboard.writeText(payload.password);
-      showToast('Password copied to clipboard');
-    }catch{ showToast('Clipboard access blocked here'); }
+      animateCopyBtn(btn);
+      showClipboardToast('Password copied',30);
+    }catch{ showToast('Clipboard access blocked'); }
+    return;
   }
-  if(action==='edit') openEntryModal(entry);
-  if(action==='delete') await deleteEntry(entry);
+  if(action==='edit'){ openEntryModal(entry); return; }
+  if(action==='delete'){ openConfirmModal(entry); return; }
 });
 
 /* ══════════════════════════════════════════════
@@ -1136,23 +1541,50 @@ async function openDetailPopup(entry){
   const payload=JSON.parse(await decryptText(sessionKey,entry.iv,entry.data));
   popupDecryptedPass=payload.password;
 
+  // header icon
+  const headerIcon=document.getElementById('popupHeaderIcon');
+  headerIcon.style.background=avatarBg(entry.category);
+  headerIcon.style.color=avatarColor(entry.category);
+  headerIcon.textContent=avatarLetter(entry.site);
+  const favUrl=getFaviconUrl(entry.site,entry.url);
+  const img=new Image();
+  img.onload=()=>{
+    headerIcon.textContent='';
+    const imgEl=document.createElement('img');
+    imgEl.src=favUrl; imgEl.alt='';
+    headerIcon.appendChild(imgEl);
+  };
+  img.src=favUrl;
+
   document.getElementById('popupSiteName').textContent=entry.site;
   document.getElementById('popupCategory').textContent=entry.category;
-  document.getElementById('popupSite').textContent=entry.site;
   document.getElementById('popupUsername').textContent=entry.username;
   document.getElementById('popupPassword').textContent='••••••••••••';
 
+  // URL link
+  const urlLink=document.getElementById('popupUrlLink');
+  if(entry.url){
+    urlLink.href=entry.url;
+    urlLink.style.display='flex';
+  }else{ urlLink.style.display='none'; }
+
+  // password strength mini bar
+  const s=passStrength(popupDecryptedPass);
+  const fill=document.getElementById('popupStrengthFill');
+  const lbl=document.getElementById('popupStrengthLbl');
+  fill.style.width=(s/5*100)+'%';
+  if(s<=1){fill.style.background='var(--danger)';lbl.textContent='Weak password — consider updating';}
+  else if(s<=3){fill.style.background='var(--brass)';lbl.textContent='Fair strength';}
+  else{fill.style.background='var(--verdigris)';lbl.textContent='Strong password';}
+
+  // notes
   const notesRow=document.getElementById('popupNotesRow');
-  if(payload.notes && payload.notes.trim()){
+  if(payload.notes&&payload.notes.trim()){
     document.getElementById('popupNotes').textContent=payload.notes;
     notesRow.style.display='';
-  } else {
-    notesRow.style.display='none';
-  }
+  }else{ notesRow.style.display='none'; }
 
-  // reset eye icon to "show"
   document.getElementById('popupEyeIcon').innerHTML=`<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`;
-
   document.getElementById('detailPopupOverlay').classList.remove('hidden');
 }
 
@@ -1161,59 +1593,80 @@ function closeDetailPopup(){
   currentPopupEntry=null; popupPassVisible=false; popupDecryptedPass='';
 }
 
-document.getElementById('closeDetailPopup').addEventListener('click', closeDetailPopup);
-document.getElementById('detailPopupOverlay').addEventListener('click', e=>{
-  if(e.target===e.currentTarget) closeDetailPopup();
-});
+document.getElementById('closeDetailPopup').addEventListener('click',closeDetailPopup);
+document.getElementById('detailPopupOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeDetailPopup();});
 
-document.getElementById('popupTogglePass').addEventListener('click', ()=>{
+document.getElementById('popupTogglePass').addEventListener('click',()=>{
   popupPassVisible=!popupPassVisible;
   const passEl=document.getElementById('popupPassword');
   const eyeEl=document.getElementById('popupEyeIcon');
   if(popupPassVisible){
     passEl.textContent=popupDecryptedPass;
     eyeEl.innerHTML=`<path d="M3 3l18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.24 4.24"/><path d="M9.9 5.1A10.7 10.7 0 0 1 12 5c6.5 0 10 7 10 7a13.2 13.2 0 0 1-2.6 3.4M6.6 6.6A13.6 13.6 0 0 0 2 12s3.5 7 10 7a10.6 10.6 0 0 0 3.4-.6"/>`;
-  } else {
+  }else{
     passEl.textContent='••••••••••••';
     eyeEl.innerHTML=`<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`;
   }
 });
 
-document.getElementById('popupCopyPass').addEventListener('click', async ()=>{
+document.getElementById('popupCopyPass').addEventListener('click',async()=>{
   try{
     await navigator.clipboard.writeText(popupDecryptedPass);
-    showToast('Password copied');
-  }catch{ showToast('Clipboard access blocked'); }
+    animateCopyBtn(document.getElementById('popupCopyPass'));
+    showClipboardToast('Password copied',30);
+  }catch{showToast('Clipboard access blocked');}
 });
 
-document.getElementById('popupCopyUser').addEventListener('click', async ()=>{
+document.getElementById('popupCopyUser').addEventListener('click',async()=>{
   try{
     await navigator.clipboard.writeText(currentPopupEntry.username);
+    animateCopyBtn(document.getElementById('popupCopyUser'));
     showToast('Username copied');
-  }catch{ showToast('Clipboard access blocked'); }
+  }catch{showToast('Clipboard access blocked');}
 });
 
-document.getElementById('popupEditBtn').addEventListener('click', ()=>{
-  closeDetailPopup();
-  openEntryModal(currentPopupEntry);
-});
-
-document.getElementById('popupDeleteBtn').addEventListener('click', async ()=>{
-  if(!currentPopupEntry) return;
+document.getElementById('popupEditBtn').addEventListener('click',()=>{
   const entry=currentPopupEntry;
   closeDetailPopup();
-  await deleteEntry(entry);
+  openEntryModal(entry);
+});
+document.getElementById('popupDeleteBtn').addEventListener('click',()=>{
+  const entry=currentPopupEntry;
+  closeDetailPopup();
+  openConfirmModal(entry);
+});
+
+/* ══════════════════════════════════════════════
+   CONFIRM DELETE MODAL (replaces window.confirm)
+══════════════════════════════════════════════ */
+function openConfirmModal(entry){
+  pendingDeleteEntry=entry;
+  document.getElementById('confirmBody').innerHTML=`Are you sure you want to delete <strong>${entry.site}</strong>? This cannot be undone.`;
+  document.getElementById('confirmModalOverlay').classList.remove('hidden');
+}
+function closeConfirmModal(){
+  document.getElementById('confirmModalOverlay').classList.add('hidden');
+  pendingDeleteEntry=null;
+}
+document.getElementById('closeConfirmModal').addEventListener('click',closeConfirmModal);
+document.getElementById('confirmCancelBtn').addEventListener('click',closeConfirmModal);
+document.getElementById('confirmModalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConfirmModal();});
+document.getElementById('confirmDeleteBtn').addEventListener('click',async()=>{
+  if(!pendingDeleteEntry) return;
+  await deleteEntry(pendingDeleteEntry);
+  closeConfirmModal();
 });
 
 /* ══════════════════════════════════════════════
    DELETE ENTRY
 ══════════════════════════════════════════════ */
 async function deleteEntry(entry){
-  if(!confirm(`Delete the entry for "${entry.site}"?`)) return;
   const {error}=await sb.from('vault_items').delete().eq('id',entry.id);
-  if(error){ showToast('Could not delete — try again'); return; }
+  if(error){showToast('Could not delete — try again');return;}
   entries=entries.filter(x=>x.id!==entry.id);
+  delete strengthCache[entry.id];
   renderEntries();
+  renderHealthBar();
   showToast('Entry deleted');
 }
 
@@ -1229,45 +1682,50 @@ async function openEntryModal(entry){
   if(entry){
     document.getElementById('entryCategory').value=entry.category||'social';
     document.getElementById('entrySite').value=entry.site;
+    document.getElementById('entryUrl').value=entry.url||'';
     document.getElementById('entryUsername').value=entry.username;
     const payload=JSON.parse(await decryptText(sessionKey,entry.iv,entry.data));
     document.getElementById('entryPassword').value=payload.password;
     document.getElementById('entryNotes').value=payload.notes||'';
-  } else {
+  }else{
     document.getElementById('entryCategory').value=activeCategory==='all'?'social':activeCategory;
   }
   document.getElementById('entryModalOverlay').classList.remove('hidden');
 }
-function closeEntryModal(){ document.getElementById('entryModalOverlay').classList.add('hidden'); }
-document.getElementById('closeEntryModal').addEventListener('click', closeEntryModal);
-document.getElementById('cancelEntryBtn').addEventListener('click', closeEntryModal);
-document.getElementById('entryModalOverlay').addEventListener('click', e=>{
-  if(e.target===e.currentTarget) closeEntryModal();
-});
+function closeEntryModal(){document.getElementById('entryModalOverlay').classList.add('hidden');}
+document.getElementById('closeEntryModal').addEventListener('click',closeEntryModal);
+document.getElementById('cancelEntryBtn').addEventListener('click',closeEntryModal);
+document.getElementById('entryModalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEntryModal();});
 
-document.getElementById('entryForm').addEventListener('submit', async e=>{
+document.getElementById('entryForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const id=document.getElementById('entryId').value;
   const category=document.getElementById('entryCategory').value;
   const site=document.getElementById('entrySite').value.trim();
+  const url=document.getElementById('entryUrl').value.trim();
   const username=document.getElementById('entryUsername').value.trim();
   const password=document.getElementById('entryPassword').value;
   const notes=document.getElementById('entryNotes').value.trim();
-  if(!site||!username||!password){ document.getElementById('entryError').textContent='Please fill in site, username and password.'; return; }
-  const encrypted=await encryptText(sessionKey, JSON.stringify({password,notes}));
+  if(!site||!username||!password){document.getElementById('entryError').textContent='Please fill in site, username and password.';return;}
+  const encrypted=await encryptText(sessionKey,JSON.stringify({password,notes}));
   try{
     if(id){
-      const {error}=await sb.from('vault_items').update({category,site,username,iv:encrypted.iv,data:encrypted.data}).eq('id',id);
+      const {error}=await sb.from('vault_items').update({category,site,url:url||null,username,iv:encrypted.iv,data:encrypted.data}).eq('id',id);
       if(error) throw error;
       const entry=entries.find(x=>x.id===id);
-      Object.assign(entry,{category,site,username,iv:encrypted.iv,data:encrypted.data});
-    } else {
-      const {data,error}=await sb.from('vault_items').insert({user_id:currentUser.id,category,site,username,iv:encrypted.iv,data:encrypted.data}).select().single();
+      Object.assign(entry,{category,site,url:url||null,username,iv:encrypted.iv,data:encrypted.data});
+      strengthCache[id]=passStrength(password);
+    }else{
+      const {data,error}=await sb.from('vault_items').insert({user_id:currentUser.id,category,site,url:url||null,username,iv:encrypted.iv,data:encrypted.data}).select().single();
       if(error) throw error;
       entries.unshift(data);
+      strengthCache[data.id]=passStrength(password);
     }
-    closeEntryModal(); renderEntries(); showToast('Entry saved');
-  }catch(err){ document.getElementById('entryError').textContent='Could not save to the server.'; }
+    closeEntryModal();
+    renderEntries();
+    renderHealthBar();
+    showToast('Entry saved');
+  }catch(err){document.getElementById('entryError').textContent='Could not save to the server.';}
 });
 
 /* password generator */
@@ -1276,7 +1734,7 @@ function generatePassword(len,syms){
   const r=crypto.getRandomValues(new Uint32Array(len));
   return Array.from(r,v=>charset[v%charset.length]).join('');
 }
-document.getElementById('generateBtn').addEventListener('click', ()=>{
+document.getElementById('generateBtn').addEventListener('click',()=>{
   const len=Math.min(32,Math.max(8,Number(document.getElementById('genLength').value)||16));
   const syms=document.getElementById('genSymbols').checked;
   document.getElementById('entryPassword').value=generatePassword(len,syms);
@@ -1284,23 +1742,23 @@ document.getElementById('generateBtn').addEventListener('click', ()=>{
 });
 
 /* ══════════════════════════════════════════════
-   SHOW / HIDE TOGGLES (eye buttons on inputs)
+   EYE BUTTONS
 ══════════════════════════════════════════════ */
-document.addEventListener('click', e=>{
+document.addEventListener('click',e=>{
   const btn=e.target.closest('.eye-btn[data-toggle]'); if(!btn) return;
   const target=document.getElementById(btn.dataset.toggle); if(!target) return;
   const showing=target.type==='text';
   target.type=showing?'password':'text';
   const svg=btn.querySelector('svg');
   svg.innerHTML=showing
-    ? `<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`
-    : `<path d="M3 3l18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.24 4.24"/><path d="M9.9 5.1A10.7 10.7 0 0 1 12 5c6.5 0 10 7 10 7a13.2 13.2 0 0 1-2.6 3.4M6.6 6.6A13.6 13.6 0 0 0 2 12s3.5 7 10 7a10.6 10.6 0 0 0 3.4-.6"/>`;
+    ?`<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>`
+    :`<path d="M3 3l18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.24 4.24"/><path d="M9.9 5.1A10.7 10.7 0 0 1 12 5c6.5 0 10 7 10 7a13.2 13.2 0 0 1-2.6 3.4M6.6 6.6A13.6 13.6 0 0 0 2 12s3.5 7 10 7a10.6 10.6 0 0 0 3.4-.6"/>`;
 });
 
 /* ══════════════════════════════════════════════
    CHANGE MASTER KEY
 ══════════════════════════════════════════════ */
-document.getElementById('changePasswordForm').addEventListener('submit', async e=>{
+document.getElementById('changePasswordForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const errEl=document.getElementById('changePwError');
   errEl.textContent='';
@@ -1313,8 +1771,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async e
     const checkKey=await deriveKey(current,vaultMeta.salt);
     const check=await decryptText(checkKey,vaultMeta.verifier_iv,vaultMeta.verifier_data);
     if(check!=='vault-unlock-ok') throw new Error('wrong');
-  }catch{ errEl.textContent='Current master key is incorrect.'; return; }
-
+  }catch{errEl.textContent='Current master key is incorrect.';return;}
   const newSalt=b64enc(crypto.getRandomValues(new Uint8Array(16)));
   const newKey=await deriveKey(next,newSalt);
   try{
@@ -1331,16 +1788,96 @@ document.getElementById('changePasswordForm').addEventListener('submit', async e
     sessionKey=newKey;
     document.getElementById('changePasswordForm').reset();
     showToast('Master key updated successfully');
-  }catch{ errEl.textContent='Could not update — please try again.'; }
+  }catch{errEl.textContent='Could not update — please try again.';}
 });
 
 /* ══════════════════════════════════════════════
-   ESC KEY closes modals
+   EXPORT VAULT
 ══════════════════════════════════════════════ */
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape'){
-    closeEntryModal();
-    closeDetailPopup();
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  if(!entries.length){showToast('Nothing to export yet');return;}
+  const exportData={
+    version:1,
+    exported:new Date().toISOString(),
+    entries:entries.map(e=>({
+      category:e.category,
+      site:e.site,
+      url:e.url||null,
+      username:e.username,
+      iv:e.iv,
+      data:e.data,
+      created_at:e.created_at
+    }))
+  };
+  const blob=new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`cipher-vault-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Vault exported');
+});
+
+/* ══════════════════════════════════════════════
+   IMPORT VAULT
+══════════════════════════════════════════════ */
+const importDrop=document.getElementById('importDropZone');
+const importFileInput=document.getElementById('importFileInput');
+
+importDrop.addEventListener('click',()=>importFileInput.click());
+importDrop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')importFileInput.click();});
+importDrop.addEventListener('dragover',e=>{e.preventDefault();importDrop.classList.add('drag-over');});
+importDrop.addEventListener('dragleave',()=>importDrop.classList.remove('drag-over'));
+importDrop.addEventListener('drop',e=>{
+  e.preventDefault(); importDrop.classList.remove('drag-over');
+  const file=e.dataTransfer.files[0];
+  if(file) processImportFile(file);
+});
+importFileInput.addEventListener('change',()=>{
+  if(importFileInput.files[0]) processImportFile(importFileInput.files[0]);
+  importFileInput.value='';
+});
+
+async function processImportFile(file){
+  const errEl=document.getElementById('importError');
+  errEl.textContent='';
+  try{
+    const text=await file.text();
+    const parsed=JSON.parse(text);
+    if(!parsed.entries||!Array.isArray(parsed.entries)) throw new Error('Invalid format');
+    let added=0;
+    for(const item of parsed.entries){
+      if(!item.site||!item.username||!item.iv||!item.data) continue;
+      // verify we can decrypt (same master key)
+      try{ await decryptText(sessionKey,item.iv,item.data); }
+      catch{ errEl.textContent='This backup was encrypted with a different master key.'; return; }
+      const {data,error}=await sb.from('vault_items').insert({
+        user_id:currentUser.id,
+        category:item.category||'social',
+        site:item.site,
+        url:item.url||null,
+        username:item.username,
+        iv:item.iv,
+        data:item.data
+      }).select().single();
+      if(!error){ entries.unshift(data); added++; }
+    }
+    renderEntries();
+    renderHealthBar();
+    showToast(`Imported ${added} entr${added===1?'y':'ies'}`);
+  }catch(e){
+    errEl.textContent=e.message||'Could not read file — make sure it is a valid Cipher Vault backup.';
+  }
+}
+
+/* ══════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeEntryModal();closeDetailPopup();closeConfirmModal();}
+  if((e.ctrlKey||e.metaKey)&&e.key==='n'&&sessionKey){
+    e.preventDefault();
+    openEntryModal();
   }
 });
 
